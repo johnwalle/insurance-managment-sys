@@ -17,7 +17,7 @@ if ($conn->connect_error) {
 
 // Fetch all registered users
 $users = [];
-$sql = "SELECT Username, First_Name, Last_Name, Email, Phone_Number, Sub_City, Kebele, Home_No, Date_Of_Birth, Gender FROM registered_user";
+$sql = "SELECT Username, FirstName, LastName, Email, Phone, SubCity, Kebele, HomeNo, BirthDate, Gender FROM Users";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -47,7 +47,6 @@ $conn->close();
             background-color: #f4f4f9;
             color: #333;
             background-image: url('../Images/bg14.jpg'); no-repeat center center fixed;
-
         }
 
         h2 {
@@ -161,14 +160,14 @@ $conn->close();
             <?php foreach ($users as $user): ?>
             <tr>
                 <td><?= htmlspecialchars($user['Username']); ?></td>
-                <td><?= htmlspecialchars($user['First_Name']); ?></td>
-                <td><?= htmlspecialchars($user['Last_Name']); ?></td>
+                <td><?= htmlspecialchars($user['FirstName']); ?></td>
+                <td><?= htmlspecialchars($user['LastName']); ?></td>
                 <td><a href="mailto:<?= htmlspecialchars($user['Email']); ?>"><?= htmlspecialchars($user['Email']); ?></a></td>
-                <td><?= htmlspecialchars($user['Phone_Number']); ?></td>
-                <td><?= htmlspecialchars($user['Sub_City']); ?></td>
+                <td><?= htmlspecialchars($user['Phone']); ?></td>
+                <td><?= htmlspecialchars($user['SubCity']); ?></td>
                 <td><?= htmlspecialchars($user['Kebele']); ?></td>
-                <td><?= htmlspecialchars($user['Home_No']); ?></td>
-                <td><?= htmlspecialchars($user['Date_Of_Birth']); ?></td>
+                <td><?= htmlspecialchars($user['HomeNo']); ?></td>
+                <td><?= htmlspecialchars($user['BirthDate']); ?></td>
                 <td><?= htmlspecialchars($user['Gender']); ?></td>
             </tr>
             <?php endforeach; ?>
