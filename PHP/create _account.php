@@ -1,195 +1,190 @@
 <?php
-    session_start();
-    include "db_conn.php";
+session_start();
+require_once "db_conn.php"; // Ensure your database connection is properly set here
+
+$error = '';
+$success = '';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Collect form data
+    $fname = $_POST['name'] ?? '';
+    $lname = $_POST['lname'] ?? '';
+    $email = $_POST['email'] ?? '';
+    $phone = $_POST['phone'] ?? '';
+    $bday = $_POST['bday'] ?? '';
+    $gender = $_POST['gender'] ?? '';
+    $sub_city = $_POST['sub_city'] ?? '';
+    $kebele = $_POST['kebele'] ?? '';
+    $homeno = $_POST['homeno'] ?? '';
+    $usertype = $_POST['usertype'] ?? 'User'; 
+    $uname = $_POST['uname'] ?? '';
+    $password = $_POST['password'] ?? '';
+    $re_password = $_POST['re_password'] ?? '';
+
+    // Validate required fields
+    if (empty($fname) || empty($lname) || empty($email) || empty($phone) || empty($bday) || empty($gender) || empty($uname) || empty($password) || empty($re_password)) {
+        $error = "All fields are required.";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error = "Invalid email format.";
+    } elseif ($password !== $re_password) {
+        $error = "Passwords do not match.";
+    } else {
+        // Check if username already exists
+        $stmt = $conn->prepare("SELECT * FROM Users WHERE Username = ?");
+        $stmt->execute([$uname]);
+        
+        if ($stmt->rowCount() > 0) {
+            $error = "Username already exists.";
+        } else {
+            // Securely hash the password
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+            // Insert new user
+            $stmt = $conn->prepare("INSERT INTO Users (FirstName, LastName, Email, Phone, Birthday, Gender, SubCity, Kebele, HomeNo, UserType, Username, Password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $success = $stmt->execute([$fname, $lname, $email, $phone, $bday, $gender, $sub_city, $kebele, $homeno, $usertype, $uname, $hashed_password]);
+
+            if ($success) {
+                // Get user ID and start session
+                $_SESSION['id'] = $conn->lastInsertId();
+                header("Location: homeloggedin.php");  // Redirect after successful registration
+                exit();
+            } else {
+                $error = "Failed to register. Please try again.";
+            }
+        }
+    }
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Sign Up | Gondar health insurance </title>
-    <link rel="stylesheet" type="text/css" href="../CSS/registerStyles.css">
-    <script src="../JS/registerJS.js"></script>
+    <title>Sign Up | Gondar Health Insurance</title>
     <link rel="icon" type="image/x-icon" href="../Images/logo.png">
-
+    <link rel="stylesheet" href="../CSS/registerStyles.css">
     <style>
-        /*Error and success styles*/
-        #error {
-            background-color: #dd2020;
-            color: white;
-            padding: 10px;
-            width: 95%;
-            border-radius: 5px;
-            margin: 20px auto;
-            text-align: center;
+          #wrapper__form {
+            max-width: 700px;
+            margin: 50px auto;
+            background:rgba(248, 248, 248, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
- 
-        #success {
-            background: #0ec138;
-            color: white;
-            padding: 10px;
-            width: 95%;
-            border-radius: 5px;
-            margin: 20px auto;
-            text-align: center;
-        }
+        input[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
 
-        #bday{
-            margin-bottom: 15px;
-        }
+input[type="submit"]:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
 
-        #country{
-            margin-bottom: 15px;
-        }
-
-        #name-feild{
-            margin-bottom:10px;
-        }
-        
+input[type="submit"]:active {
+    background-color: #003366;
+}
 
     </style>
 </head>
-
 <body>
-    <div class="wrapper">
-        <span class="icon-close"><a href="./admin.php" style="color: white;"><ion-icon name="close"></ion-icon></a></span>
-        <div class="form-box register">
-            <h2>Registration</h2>
-            <form action="signup-check.php" id="form" method="POST" onsubmit="return checkPassword()">
+    <div class="wrapper" id="wrapper__form">
 
-            <?php if (isset($_GET['error'])) { ?>
-     		    <p id="error"><?php echo $_GET['error']; ?></p>
-     	    <?php } ?>
+        <!-- Error and success messages -->
+        <?php if ($error): ?>
+            <p id="error"><?= htmlspecialchars($error) ?></p>
+        <?php endif; ?>
+        <?php if ($success): ?>
+            <p id="success">Registration successful! Redirecting...</p>
+        <?php endif; ?>
 
-            <?php if (isset($_GET['success'])) { ?>
-               <p id="success"><?php echo $_GET['success']; ?></p>
-            <?php } ?>
+        <form action="register.php" method="POST">
+        <h2>Registration</h2>
 
             <div class="input-box">
-                <label for="name">Name</label>
+                <label>Full Name</label>
                 <div class="column">
-                    <?php if (isset($_GET['name'])) { ?>
-                        <input type="text" name="name" placeholder="First Name" required id="name-feild" value="<?php echo $_GET['name']; ?>"><br>
-                    <?php }else{ ?>
-                        <input type="text" 
-                            name="name" 
-                            placeholder="First Name"
-                            id="name-feild"><br>
-                    <?php }?>
+                    <input type="text" name="name" placeholder="First Name" required>
                     <input type="text" name="lname" placeholder="Last Name" required>
                 </div>
             </div>
 
-
             <div class="input-box">
-                <label for="email">E-mail</label>
-                <input type="email" id="email" name="email" placeholder="ex:myName@gmail.com" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}" required>
+                <label>Email</label>
+                <input type="email" name="email" placeholder="ex: myName@gmail.com" required>
             </div>
 
             <div class="column">
                 <div class="input-box">
-                    <label for="phoneNumber">Phone Number</label>
-                    <input type="phone" name="phone" placeholder="xxxxxxxxxx" pattern="[0-9]{10}" required>
+                    <label>Phone Number</label>
+                    <input type="text" name="phone" placeholder="xxxxxxxxxx" required>
                 </div>
-    
                 <div class="input-box">
-                    <label for="birthday">Date of Birth</label>
-                    <input type="date" name="bday" id="bday" required>
+                    <label>Date of Birth</label>
+                    <input type="date" name="bday" required>
                 </div>
             </div>
 
             <div class="gender-box">
                 <h3>Gender</h3>
                 <div class="gender-option">
-                    <div class="gender">
-                        <input type="radio" id="check-male" name="gender" value="Male" checked>
-                        <label for="check-male">Male</label>
-                    </div>
-                    <div class="gender">
-                        <input type="radio" id="check-female" name="gender" value="Female">
-                        <label for="check-female">Female</label>
-                    </div>
-                  
+                    <label><input type="radio" name="gender" value="Male" checked> Male</label>
+                    <label><input type="radio" name="gender" value="Female"> Female</label>
                 </div>
             </div>
 
             <div class="input-box">
-                <label for="address">Address</label>
+                <label>Address</label>
                 <div class="column">
-                <input type="text" name="sub_city" placeholder="Sub City" required>
-<input type="text" name="kebele" placeholder="Kebele" required>
-<input type="text" name="homeno" placeholder="Home No" required>
-
+                    <input type="text" name="sub_city" placeholder="Sub City" required>
+                    <input type="text" name="kebele" placeholder="Kebele" required>
+                    <input type="text" name="homeno" placeholder="Home No" required>
                 </div>
-                    
             </div>
-            <div class="uType-box" style="margin-bottom: 15px;">
-    <h3 style="margin-bottom: 10px; color: #555; font-size: 16px;">User Type</h3>
-    <div class="uType-option" style="display: flex; flex-wrap: wrap; gap: 5px;">
-        <!-- First Row -->
-        <div class="uType" style="flex: 1 1 calc(50% - 10px); box-sizing: border-box; display: flex; align-items: center;">
-            <input type="radio" id="check-user" name="usertype" value="User" checked style="margin-right: 5px;">
-            <label for="check-user" style="margin: 0;">User</label>
-        </div>
-        <div class="uType" style="flex: 1 1 calc(50% - 10px); box-sizing: border-box; display: flex; align-items: center;">
-            <input type="radio" id="check-admin" name="usertype" value="Admin" style="margin-right: 5px;">
-            <label for="check-admin" style="margin: 0;">Admin</label>
-        </div>
-        <!-- Second Row -->
-        <div class="uType" style="flex: 1 1 calc(50% - 10px); box-sizing: border-box; display: flex; align-items: center;">
-            <input type="radio" id="check-KebeleManager" name="usertype" value="KebeleManager" style="margin-right: 5px;">
-            <label for="check-KebeleManager" style="margin: 0;">Kebele Manager</label>
-        </div>
-        <div class="uType" style="flex: 1 1 calc(50% - 10px); box-sizing: border-box; display: flex; align-items: center;">
-            <input type="radio" id="check-healthinsurancemanager" name="usertype" value="HealthInsuranceManager" style="margin-right: 5px;">
-            <label for="check-healthinsurancemanager" style="margin: 0;">Health Insurance Manager</label>
-        </div>
-        <div class="uType" style="flex: 1 1 calc(50% - 10px); box-sizing: border-box; display: flex; align-items: center;">
-            <input type="radio" id="check-Hiofficier" name="usertype" value="Hiofficier" style="margin-right: 5px;">
-            <label for="check-Hiofficier" style="margin: 0;">HI Officer</label>
-        </div>
-    </div>
-</div>
 
-
-
-            <div class="input-box">
-                <label for="username">Username</label>
-                <?php if (isset($_GET['uname'])) { ?>
-                    <input type="text" id="username" name="uname" placeholder="Username" required value="<?php echo $_GET['uname']; ?>"><br>
-                <?php }else{ ?>
-                    <input type="text" 
-                      name="uname" 
-                      placeholder="Username"><br>
-                <?php }?>
+            <div class="uType-box">
+                <h3>User Type</h3>
+                <div class="uType-option">
+                    <label><input type="radio" name="usertype" value="User" checked> User</label>
+                    <label><input type="radio" name="usertype" value="Admin"> Admin</label>
+                    <label><input type="radio" name="usertype" value="KebeleManager"> Kebele Manager</label>
+                    <label><input type="radio" name="usertype" value="HealthInsuranceManager"> Health Insurance Manager</label>
+                    <label><input type="radio" name="usertype" value="Hiofficier"> HI Officer</label>
+                </div>
             </div>
 
             <div class="input-box">
-                <label for="password">Password</label>
-                <input type="password" id="pwd" name="password" placeholder="Password" required>
+                <label>Username</label>
+                <input type="text" name="uname" placeholder="Username" required>
             </div>
 
             <div class="input-box">
-                <label for="reEnterPassword">Re-Enter Password</label>
-                <input type="password" id="cnfrmpwd" name="re_password" placeholder="Re-Enter Password" required>
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Enter password" required>
+            </div>
+
+            <div class="input-box">
+                <label>Confirm Password</label>
+                <input type="password" name="re_password" placeholder="Re-enter password" required>
             </div>
 
             <div class="check">
-                <input type="checkbox" class="inputStyle" id="checkbox" onclick="enableButton()">I have read and agree to the <a href="./Terms and Conditions.php" class="link">Terms & Conditions</a>
+                <input type="checkbox" required> I have read and agree to the <a href="terms.php">Terms & Conditions</a>
             </div>
-                
-            <input type="submit" value="Register" name="submit" id="submitBtn" disabled>
 
-            <div class="line"></div>
+            <input type="submit" value="Register">
 
-         
+            <h4>Already have an account? <a href="login.php">Log in</a></h4>
         </form>
-    </div>  
-    
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-
+    </div>
 </body>
 </html>

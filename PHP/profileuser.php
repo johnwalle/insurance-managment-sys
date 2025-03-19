@@ -22,13 +22,13 @@ $loggedInUsername = $_SESSION['Username']; // Adjust this as necessary
 // Fetch user information
 $userInfo = [];
 if ($loggedInUsername) {
-    $stmt = $conn->prepare("SELECT Username, First_Name, Last_Name, Email, Phone_Number, Sub_City, Kebele, Home_No, Date_Of_Birth, Gender FROM registered_user WHERE Username = ?");
+    $stmt = $conn->prepare("SELECT Username, FirstName, LastName, Email, Phone, BirthDate, Gender, SubCity, Kebele, HomeNo FROM Users WHERE Username = ?");
     $stmt->bind_param("s", $loggedInUsername);
     $stmt->execute();
     $stmt->store_result();
     
     if ($stmt->num_rows > 0) {
-        $stmt->bind_result($userInfo['Username'], $userInfo['First_Name'], $userInfo['Last_Name'], $userInfo['Email'], $userInfo['Phone_Number'], $userInfo['Sub_City'], $userInfo['Kebele'], $userInfo['Home_No'], $userInfo['Date_Of_Birth'], $userInfo['Gender']);
+        $stmt->bind_result($userInfo['Username'], $userInfo['FirstName'], $userInfo['LastName'], $userInfo['Email'], $userInfo['Phone'], $userInfo['BirthDate'], $userInfo['Gender'], $userInfo['SubCity'], $userInfo['Kebele'], $userInfo['HomeNo']);
         $stmt->fetch();
     } else {
         $userInfo['Error'] = "User not found.";
@@ -217,11 +217,11 @@ $conn->close();
             </div>
             <div class="profile-item">
                 <i class="fas fa-id-badge"></i>
-                <span>First Name: <?= htmlspecialchars($userInfo['First_Name'] ?? ''); ?></span>
+                <span>First Name: <?= htmlspecialchars($userInfo['FirstName'] ?? ''); ?></span>
             </div>
             <div class="profile-item">
                 <i class="fas fa-id-badge"></i>
-                <span>Last Name: <?= htmlspecialchars($userInfo['Last_Name'] ?? ''); ?></span>
+                <span>Last Name: <?= htmlspecialchars($userInfo['LastName'] ?? ''); ?></span>
             </div>
             <div class="profile-item">
                 <i class="fas fa-envelope"></i>
@@ -229,13 +229,13 @@ $conn->close();
             </div>
             <div class="profile-item">
                 <i class="fas fa-phone"></i>
-                <span>Phone Number: <?= htmlspecialchars($userInfo['Phone_Number'] ?? ''); ?></span>
+                <span>Phone Number: <?= htmlspecialchars($userInfo['Phone'] ?? ''); ?></span>
             </div>
         </div>
         <div class="profile-info-right">
             <div class="profile-item">
                 <i class="fas fa-city"></i>
-                <span>Sub City: <?= htmlspecialchars($userInfo['Sub_City'] ?? ''); ?></span>
+                <span>Sub City: <?= htmlspecialchars($userInfo['SubCity'] ?? ''); ?></span>
             </div>
             <div class="profile-item">
                 <i class="fas fa-map-marker-alt"></i>
@@ -243,11 +243,11 @@ $conn->close();
             </div>
             <div class="profile-item">
                 <i class="fas fa-home"></i>
-                <span>Home Number: <?= htmlspecialchars($userInfo['Home_No'] ?? ''); ?></span>
+                <span>Home Number: <?= htmlspecialchars($userInfo['HomeNo'] ?? ''); ?></span>
             </div>
             <div class="profile-item">
                 <i class="fas fa-birthday-cake"></i>
-                <span>Date of Birth: <?= htmlspecialchars($userInfo['Date_Of_Birth'] ?? ''); ?></span>
+                <span>Date of Birth: <?= htmlspecialchars($userInfo['BirthDate'] ?? ''); ?></span>
             </div>
             <div class="profile-item">
                 <i class="fas fa-venus-mars"></i>
