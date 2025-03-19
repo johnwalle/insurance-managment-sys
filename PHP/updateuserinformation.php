@@ -15,10 +15,10 @@ if ($conn->connect_error) {
     die("<p class='status-message error'>Connection failed: " . $conn->connect_error . "</p>");
 }
 
-// Fetch users with UserType = 'users'
+// Fetch users with UserType = 'User'
 $users = [];
-$sql = "SELECT ID, Username, First_Name, Last_Name, Email, Phone_Number, Sub_City, Kebele, Home_No, Date_Of_Birth, Gender 
-        FROM registered_user 
+$sql = "SELECT UserID, FirstName, LastName, Email, Phone, BirthDate, Gender, SubCity, Kebele, HomeNo, Username
+        FROM Users 
         WHERE UserType = 'User'";
 $result = $conn->query($sql);
 
@@ -49,7 +49,6 @@ $conn->close();
             background-color: #f4f4f9;
             color: #333;
             background-image: url('../Images/bg14.jpg'); no-repeat center center fixed;
-
         }
 
         h2 {
@@ -166,11 +165,11 @@ $conn->close();
                 <th><i class="fas fa-user"></i> Last Name</th>
                 <th><i class="fas fa-envelope"></i> Email</th>
                 <th><i class="fas fa-phone"></i> Phone Number</th>
+                <th><i class="fas fa-calendar-day"></i> Date of Birth</th>
+                <th><i class="fas fa-genderless"></i> Gender</th>
                 <th><i class="fas fa-city"></i> Sub City</th>
                 <th><i class="fas fa-map-marker-alt"></i> Kebele</th>
                 <th><i class="fas fa-home"></i> Home No</th>
-                <th><i class="fas fa-calendar-day"></i> Date of Birth</th>
-                <th><i class="fas fa-genderless"></i> Gender</th>
                 <th><i class="fas fa-edit"></i> Action</th>
             </tr>
         </thead>
@@ -178,16 +177,16 @@ $conn->close();
             <?php foreach ($users as $user): ?>
             <tr>
                 <td><?= htmlspecialchars($user['Username']); ?></td>
-                <td><?= htmlspecialchars($user['First_Name']); ?></td>
-                <td><?= htmlspecialchars($user['Last_Name']); ?></td>
+                <td><?= htmlspecialchars($user['FirstName']); ?></td>
+                <td><?= htmlspecialchars($user['LastName']); ?></td>
                 <td><?= htmlspecialchars($user['Email']); ?></td>
-                <td><?= htmlspecialchars($user['Phone_Number']); ?></td>
-                <td><?= htmlspecialchars($user['Sub_City']); ?></td>
-                <td><?= htmlspecialchars($user['Kebele']); ?></td>
-                <td><?= htmlspecialchars($user['Home_No']); ?></td>
-                <td><?= htmlspecialchars($user['Date_Of_Birth']); ?></td>
+                <td><?= htmlspecialchars($user['Phone']); ?></td>
+                <td><?= htmlspecialchars($user['BirthDate']); ?></td>
                 <td><?= htmlspecialchars($user['Gender']); ?></td>
-                <td><a href="update_user.php?id=<?= htmlspecialchars($user['ID']); ?>" class="update-btn">Update</a></td>
+                <td><?= htmlspecialchars($user['SubCity']); ?></td>
+                <td><?= htmlspecialchars($user['Kebele']); ?></td>
+                <td><?= htmlspecialchars($user['HomeNo']); ?></td>
+                <td><a href="update_user.php?id=<?= htmlspecialchars($user['UserID']); ?>" class="update-btn">Update</a></td>
             </tr>
             <?php endforeach; ?>
         </tbody>
