@@ -22,7 +22,7 @@ $successMessage = '';
 // Fetch user data
 if (isset($_GET['id'])) {
     $userID = intval($_GET['id']);
-    $sql = "SELECT * FROM registered_user WHERE ID = ?";
+    $sql = "SELECT * FROM Users WHERE UserID = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('i', $userID);
     $stmt->execute();
@@ -47,7 +47,7 @@ if (isset($_GET['id'])) {
     $dateOfBirth = $_POST['date_of_birth'];
     $gender = $_POST['gender'];
 
-    $sql = "UPDATE registered_user SET Username = ?, First_Name = ?, Last_Name = ?, Email = ?, Phone_Number = ?, Sub_City = ?, Kebele = ?, Home_No = ?, Date_Of_Birth = ?, Gender = ? WHERE ID = ?";
+    $sql = "UPDATE Users SET Username = ?, FirstName = ?, LastName = ?, Email = ?, Phone = ?, SubCity = ?, Kebele = ?, HomeNo = ?, BirthDate = ?, Gender = ? WHERE UserID = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('ssssssssssi', $username, $firstName, $lastName, $email, $phoneNumber, $subCity, $kebele, $homeNo, $dateOfBirth, $gender, $userID);
 
@@ -240,7 +240,7 @@ $conn->close();
 
     <?php if (isset($user)): ?>
         <form id="updateForm" action="update_user.php" method="post">
-            <input type="hidden" name="id" value="<?= htmlspecialchars($user['ID']); ?>">
+            <input type="hidden" name="id" value="<?= htmlspecialchars($user['UserID']); ?>">
 
             <div class="form-group">
                 <label for="username">Username</label>
@@ -249,12 +249,12 @@ $conn->close();
 
             <div class="form-group">
                 <label for="first_name">First Name</label>
-                <input type="text" id="first_name" name="first_name" value="<?= htmlspecialchars($user['First_Name']); ?>" required>
+                <input type="text" id="FirstName" name="FirstName" value="<?= htmlspecialchars($user['First_Name']); ?>" required>
             </div>
 
             <div class="form-group">
                 <label for="last_name">Last Name</label>
-                <input type="text" id="last_name" name="last_name" value="<?= htmlspecialchars($user['Last_Name']); ?>" required>
+                <input type="text" id="LastName" name="LastName" value="<?= htmlspecialchars($user['Last_Name']); ?>" required>
             </div>
 
             <div class="form-group">
@@ -264,12 +264,12 @@ $conn->close();
 
             <div class="form-group">
                 <label for="phone_number">Phone Number</label>
-                <input type="text" id="phone_number" name="phone_number" value="<?= htmlspecialchars($user['Phone_Number']); ?>" required>
+                <input type="text" id="Phone" name="Phone" value="<?= htmlspecialchars($user['Phone_Number']); ?>" required>
             </div>
 
             <div class="form-group">
                 <label for="sub_city">Sub City</label>
-                <input type="text" id="sub_city" name="sub_city" value="<?= htmlspecialchars($user['Sub_City']); ?>" required>
+                <input type="text" id="subcity" name="subcity" value="<?= htmlspecialchars($user['Sub_City']); ?>" required>
             </div>
 
             <div class="form-group">
@@ -279,12 +279,12 @@ $conn->close();
 
             <div class="form-group">
                 <label for="home_no">Home No</label>
-                <input type="text" id="home_no" name="home_no" value="<?= htmlspecialchars($user['Home_No']); ?>" required>
+                <input type="text" id="home" name="home" value="<?= htmlspecialchars($user['Home_No']); ?>" required>
             </div>
 
             <div class="form-group">
                 <label for="date_of_birth">Date of Birth</label>
-                <input type="date" id="date_of_birth" name="date_of_birth" value="<?= htmlspecialchars($user['Date_Of_Birth']); ?>" required>
+                <input type="date" id="BirthDate" name="BirthDate" value="<?= htmlspecialchars($user['Date_Of_Birth']); ?>" required>
             </div>
 
             <div class="form-group">
