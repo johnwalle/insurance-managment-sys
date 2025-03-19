@@ -204,7 +204,7 @@
         $userToDelete = $_POST['delete_user'];
 
         // Prepare the SQL statement to delete user
-        $stmt = $conn->prepare("DELETE FROM registered_user WHERE Username = ?");
+        $stmt = $conn->prepare("DELETE FROM Users WHERE Username = ?");
         $stmt->bind_param("s", $userToDelete);
 
         if ($stmt->execute()) {
@@ -216,8 +216,8 @@
         $stmt->close();
     }
 
-    // Fetch users from the registered_user table
-    $sql = "SELECT Username, First_Name, Email, UserType, Status FROM registered_user WHERE UserType = 'user'";
+    // Fetch users from the Users table
+    $sql = "SELECT Username, FirstName, Email, UserType, Status FROM Users WHERE UserType = 'user'";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -227,7 +227,7 @@
         while ($row = $result->fetch_assoc()) {
             echo "<tr>
                     <td>" . htmlspecialchars($row['Username']) . "</td>
-                    <td>" . htmlspecialchars($row['First_Name']) . "</td>
+                    <td>" . htmlspecialchars($row['FirstName']) . "</td>
                     <td>" . htmlspecialchars($row['Email']) . "</td>
                     <td>" . htmlspecialchars($row['UserType']) . "</td>
                     <td>" . htmlspecialchars($row['Status']) . "</td>
