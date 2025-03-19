@@ -1,14 +1,15 @@
 <?php
+// Database connection details
+$servername = "localhost";   // This is the default address for your local server.
+$username = "root";          // Default username for XAMPP MySQL.
+$password = "";              // Default password is empty for XAMPP MySQL.
+$dbname = "final_project";   // The name of the database you just created.
 
-$sname = "localhost";
-$uname = "root";
-$password = "";
+// Create connection
+$conn = mysqli_connect($servername, $username, $password, $dbname);
 
-$db_name = "final_project";
-
-$conn = mysqli_connect($sname, $uname, $password, $db_name);
-
+// Check connection
 if (!$conn) {
-    echo "Connection Failed!";
-    exit();
+    die("Connection failed: " . mysqli_connect_error());
 }
+?>
