@@ -43,23 +43,14 @@
             transform: scale(1.1);
         }
 
-        .back-to-home i {
-            margin-right: 8px;
-            font-size: 18px;
-        }
-
-        .back-to-home span {
-            font-size: 14px;
-            font-weight: 500;
-        }
-
         .container {
             background: rgba(255, 255, 255, 0.9);
             border-radius: 10px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
             padding: 30px;
-            max-width: 800px;
+            max-width: 1000px;
             width: 100%;
+            overflow-x: auto;
         }
 
         h2 {
@@ -76,7 +67,7 @@
         }
 
         th, td {
-            padding: 12px;
+            padding: 10px;
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
@@ -96,7 +87,6 @@
             border: 1px solid #ddd;
             border-radius: 4px;
             font-size: 14px;
-            text-align: center;
             background-color: #f9f9f9;
             width: 100px;
             color: #333;
@@ -115,12 +105,16 @@
 </head>
 <body>
 
-<a href="admin.php" class="back-to-home"><i class="fas fa-home"></i><span>Back to Home</span></a>
+<a href="admin.php" class="back-to-home"><i class="fas fa-home"></i> <span>Back to Home</span></a>
 
 <div class="container">
     <h2>Users List</h2>
 
     <?php
+    // Enable error reporting
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+
     // Database connection
     $servername = "localhost";
     $username = "root";
@@ -133,8 +127,8 @@
         die("<p class='status-message error'>Connection failed: " . $conn->connect_error . "</p>");
     }
 
-    // Query to fetch Username, First_Name, UserType, Email, and Status from registered users where UserType is 'user'
-    $sql = "SELECT Username, First_Name, UserType, Email, Status FROM registered_user WHERE UserType = 'user'"; 
+    // Query to fetch user details
+    $sql = "SELECT UserID, FirstName, LastName, Email, Phone, BirthDate, Gender, SubCity, Kebele, HomeNo, Username, Status FROM Users";
     $result = $conn->query($sql);
 
     if (!$result) {
@@ -143,18 +137,38 @@
 
     if ($result->num_rows > 0) {
         echo "<table>";
-        echo "<tr><th>Username</th><th>First Name</th><th>Email</th><th>User Type</th><th>Status</th></tr>";
+        echo "<tr>
+                <th>UserID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Birth Date</th>
+                <th>Gender</th>
+                <th>Sub City</th>
+                <th>Kebele</th>
+                <th>Home No</th>
+                <th>Username</th>
+                <th>Status</th>
+              </tr>";
 
-        while($row = $result->fetch_assoc()) {
+        while ($row = $result->fetch_assoc()) {
             $statusClass = $row["Status"] === 'Active' ? 'active' : 'deactivated';
 
             echo "<tr>
-                    <td>" . htmlspecialchars($row["Username"]) . "</td>
-                    <td>" . htmlspecialchars($row["First_Name"]) . "</td>
+                    <td>" . htmlspecialchars($row["UserID"]) . "</td>
+                    <td>" . htmlspecialchars($row["FirstName"]) . "</td>
+                    <td>" . htmlspecialchars($row["LastName"]) . "</td>
                     <td>" . htmlspecialchars($row["Email"]) . "</td>
-                    <td>" . htmlspecialchars($row["UserType"]) . "</td>
+                    <td>" . htmlspecialchars($row["Phone"]) . "</td>
+                    <td>" . htmlspecialchars($row["BirthDate"]) . "</td>
+                    <td>" . htmlspecialchars($row["Gender"]) . "</td>
+                    <td>" . htmlspecialchars($row["SubCity"]) . "</td>
+                    <td>" . htmlspecialchars($row["Kebele"]) . "</td>
+                    <td>" . htmlspecialchars($row["HomeNo"]) . "</td>
+                    <td>" . htmlspecialchars($row["Username"]) . "</td>
                     <td>
-                        <select class='status-dropdown $statusClass' onchange='changeStatus(this, \"" . htmlspecialchars($row["Username"]) . "\")'>
+                        <select class='status-dropdown $statusClass' onchange='changeStatus(this, \"" . htmlspecialchars($row["UserID"]) . "\")'>
                             <option value='Active'" . ($row["Status"] === 'Active' ? ' selected' : '') . ">Active</option>
                             <option value='Deactivated'" . ($row["Status"] === 'Deactivated' ? ' selected' : '') . ">Deactivated</option>
                         </select>
@@ -173,20 +187,16 @@
 </div>
 
 <script>
-    function changeStatus(selectElement, username) {
+    function changeStatus(selectElement, userID) {
         var status = selectElement.value;
         
-        // Remove existing active/deactivated class
         selectElement.classList.remove('active', 'deactivated');
-        
-        // Add new class based on selected value
         if (status === 'Active') {
             selectElement.classList.add('active');
         } else {
             selectElement.classList.add('deactivated');
         }
 
-        // Send AJAX request to update the status in the database
         var xhr = new XMLHttpRequest();
         xhr.open('POST', 'update_status.php', true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -197,7 +207,7 @@
                 console.error('Failed to update status');
             }
         };
-        xhr.send('username=' + encodeURIComponent(username) + '&status=' + encodeURIComponent(status));
+        xhr.send('userID=' + encodeURIComponent(userID) + '&status=' + encodeURIComponent(status));
     }
 </script>
 
