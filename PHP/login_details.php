@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     } else {
         // Query to check if username exists
-        $sql = "SELECT * FROM registered_user WHERE Username = '$username'";
+        $sql = "SELECT * FROM Users WHERE Username = '$username'"; // Changed to 'Users' table
         $result = mysqli_query($conn, $sql);
 
         if (!$result) {
@@ -35,11 +35,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($row && password_verify($pwd, $row['Password'])) {
             // Check if the user is active
-            if ($row["UserType"] != "Admin" && $row["Status"] != "Active") {
-                // User is inactive
-                header("Location: login.php?error=accountdeactivated");
-                exit();
-            }
+            // if ($row["UserType"] != "Admin" && $row["Status"] != "Active") {
+            //     // User is inactive
+            //     header("Location: login.php?error=accountdeactivated");
+            //     exit();
+            // }
 
             // Password matches and user is active (or is an admin), start session and redirect based on user type
             $_SESSION["Username"] = $username;
