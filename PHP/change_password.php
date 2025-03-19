@@ -28,12 +28,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     session_start();
     $username = $_SESSION['Username']; // Adjust this as necessary
 
-    // Validate passwords
-    if ($newPassword !== $confirmPassword) {
+    // Validate password strength
+    if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $newPassword)) {
+        $message = "Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, one number, and one special character.";
+    } elseif ($newPassword !== $confirmPassword) {
         $message = "New passwords do not match.";
     } else {
         // Check if current password is correct
-        $stmt = $conn->prepare("SELECT Password FROM registered_user WHERE Username = ?");
+        $stmt = $conn->prepare("SELECT Password FROM Users WHERE Username = ?");
         $stmt->bind_param("s", $username);
         $stmt->execute();
         $stmt->store_result();
@@ -51,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Hash new password and update in database
                 $newHashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
 
-                $stmt = $conn->prepare("UPDATE registered_user SET Password = ? WHERE Username = ?");
+                $stmt = $conn->prepare("UPDATE Users SET Password = ? WHERE Username = ?");
                 $stmt->bind_param("ss", $newHashedPassword, $username);
                 
                 if ($stmt->execute()) {
@@ -71,6 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 $conn->close();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
