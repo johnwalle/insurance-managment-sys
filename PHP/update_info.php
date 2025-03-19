@@ -22,7 +22,7 @@ $loggedInUsername = $_SESSION['Username']; // Adjust this as necessary
 // Fetch user information for the form
 $userInfo = [];
 if ($loggedInUsername) {
-    $stmt = $conn->prepare("SELECT Username, First_Name, Last_Name, Email, Phone_Number, Sub_City, Kebele, Home_No, Date_Of_Birth, Gender FROM registered_user WHERE Username = ?");
+    $stmt = $conn->prepare("SELECT Username, FirstName, LastName, Email, Phone, SubCity, Kebele, HomeNo, BirthDate, Gender FROM Users WHERE Username = ?");
     $stmt->bind_param("s", $loggedInUsername);
     $stmt->execute();
     $stmt->store_result();
@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $message = "No changes detected. Please update at least one field first.";
     } else {
         // Update user information in the database
-        $stmt = $conn->prepare("UPDATE registered_user SET First_Name = ?, Last_Name = ?, Email = ?, Phone_Number = ?, Sub_City = ?, Kebele = ?, Home_No = ?, Date_Of_Birth = ?, Gender = ? WHERE Username = ?");
+        $stmt = $conn->prepare("UPDATE Users SET FirstName = ?, LastName = ?, Email = ?, Phone = ?, SubCity = ?, Kebele = ?, HomeNo = ?, BirthDate = ?, Gender = ? WHERE Username = ?");
         $stmt->bind_param("ssssssssss", $firstName, $lastName, $email, $phoneNumber, $subCity, $kebele, $homeNo, $dateOfBirth, $gender, $loggedInUsername);
         
         if ($stmt->execute()) {
