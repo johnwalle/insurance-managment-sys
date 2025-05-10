@@ -2,6 +2,13 @@
 // Enable error reporting
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+session_start();
+
+// Check if the user is logged in
+if (!isset($_SESSION["Username"]) || $_SESSION["Role"] !== "HealthInsuranceManager") {
+    header("Location: login.php");
+    exit();
+}
 
 // Database connection
 $servername = "localhost";
@@ -17,8 +24,8 @@ if ($conn->connect_error) {
 
 // Fetch user details based on user type
 $users = [];
-$sql = "SELECT id, Username, First_Name, Last_Name, Email, Phone_Number, Sub_City, Kebele, Home_No, Date_Of_Birth, Gender, insurance_expiry 
-        FROM registered_user 
+$sql = "SELECT UserId, Username, FirstName, LastName, Email, Phone, SubCity, Kebele, HomeNo, BirthDate, Gender, insurance_expiry 
+        FROM Users 
         WHERE UserType = 'User'"; // Adjust 'user' to match the actual user type value
 
 $result = $conn->query($sql);
@@ -54,7 +61,7 @@ $conn->close();
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         margin: 0;
         padding: 0;
-        background-image: url('../Images/bg14.jpg'); no-repeat center center fixed;
+        background-image: url('../Images/bg14.jpg');
         background-size: cover;
         color: #333;
         height: 100vh;
@@ -172,17 +179,17 @@ $conn->close();
             <?php foreach ($users as $user): ?>
             <tr>
                 <td><?= htmlspecialchars($user['Username']); ?></td>
-                <td><?= htmlspecialchars($user['First_Name']); ?></td>
-                <td><?= htmlspecialchars($user['Last_Name']); ?></td>
+                <td><?= htmlspecialchars($user['FirstName']); ?></td>
+                <td><?= htmlspecialchars($user['LastName']); ?></td>
                 <td><?= htmlspecialchars($user['Email']); ?></td>
-                <td><?= htmlspecialchars($user['Phone_Number']); ?></td>
-                <td><?= htmlspecialchars($user['Sub_City']); ?></td>
+                <td><?= htmlspecialchars($user['Phone']); ?></td>
+                <td><?= htmlspecialchars($user['SubCity']); ?></td>
                 <td><?= htmlspecialchars($user['Kebele']); ?></td>
-                <td><?= htmlspecialchars($user['Date_Of_Birth']); ?></td>
+                <td><?= htmlspecialchars($user['BirthDate']); ?></td>
                 <td><?= htmlspecialchars($user['insurance_expiry']); ?></td>
                 <td>
-                    <?php if ($user['status'] === 'Expired'): ?>
-                        <a href="renew_insurance.php?user_id=<?= $user['id']; ?>" class="renew">Renew</a>
+                    <?php if ($user['status'] == 'Expired'): ?>
+                        <a href="renew_insurance.php?user_id=<?= $user['UserId']; ?>" class="renew">Renew</a>
                     <?php else: ?>
                         <span class="expired">Active</span>
                     <?php endif; ?>

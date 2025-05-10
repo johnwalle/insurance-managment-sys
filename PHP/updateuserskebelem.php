@@ -38,7 +38,7 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Users information | Gondar Health Insurance</title>
+    <title>Update Users information | Tepi Health Insurance</title>
     <link rel="icon" type="image/x-icon" href="../Images/logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -48,7 +48,7 @@ $conn->close();
             padding: 20px;
             background-color: #f4f4f9;
             color: #333;
-            background-image: url('../Images/bg14.jpg'); no-repeat center center fixed;
+            background-image: url('../Images/bg14.jpg');
 
         }
 

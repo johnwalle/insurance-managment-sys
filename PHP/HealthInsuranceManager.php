@@ -1,9 +1,24 @@
 <?php
 session_start();
 
+include "header_Before_login.php"; // Include the header file
+$lang = "en"; // Default language is English
+if (isset($_GET['lang']) && $_GET['lang'] == 'am') {
+    $lang = "am"; // Switch to Amharic if 'lang=am' is in the URL
+}
+if (isset($_GET['lang']) && in_array($_GET['lang'], ['en', 'am'])) {
+    $lang = $_GET['lang'];
+    setcookie('lang', $lang, time() + (86400 * 30), '/'); // Cookie expires in 30 days
+    $_COOKIE['lang'] = $lang; // Update the current request with the new language
+} elseif (isset($_COOKIE['lang'])) {
+    $lang = $_COOKIE['lang'];
+} else {
+    $lang = 'en'; // Default language
+}
+
 // Check if the user is logged in
-if (!isset($_SESSION["Username"])) {
-    header("Location: login.php");  // Redirect to login page if not logged in
+if (!isset($_SESSION["Username"]) || $_SESSION["Role"] !== "HealthInsuranceManager") {
+    header("Location: login.php");
     exit();
 }
 
@@ -25,14 +40,15 @@ if ($current_hour >= 5 && $current_hour < 12) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Health Insurance Manager| Gondar Health Insurance</title>
+    <title><?php echo $lang == "en" ? "Health Insurance Manager | Tepi Health Insurance" : "የጤና መድን አስተዳዳሪ | ተፒ የጤና መድን"; ?></title>
     <link rel="icon" type="image/x-icon" href="../Images/logo.png">
     <link rel="stylesheet" href="../CSS/After_login.css">
     <link rel="stylesheet" href="../CSS/home.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- For Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 
     <style>
         /* General Body Styling */
@@ -214,28 +230,31 @@ if ($current_hour >= 5 && $current_hour < 12) {
         <div>
             <div class="logo">
                 <img src="../Images/officier.png" alt="Officer Logo">
-                <div class="site-name"> Health Insurance Manager </div>
+                <div class="site-name">
+                    <?php echo $lang == "en" ? "Health Insurance Manager" : "የጤና መድን አስተዳዳሪ"; ?>
+                </div>
             </div>
 
             <ul class="nav">
-                <li><a href="./seeuserinformation.php">View Customer Information</a></li>
-                <li><a href="./updateuserinformation.php">Update Customer Information</a></li>
-                <li><a href="./generated_userID.php">Generate Certeficate ID </a></li>
-                <li><a href="view_comments.php" class="action">see complain</a></li>
-                <li><a href="./insurancerenew.php">Renew Insurance </a></li>
-                <li><a href="./requestpaymentmanager.php">Request Payment</a></li>
+                <li><a href="./seeuserinformation.php"><?php echo $lang == "en" ? "View Customer Information" : "የደንበኞች መረጃ ይመልከቱ"; ?></a></li>
+                <li><a href="./updateuserinformation.php"><?php echo $lang == "en" ? "Update Customer Information" : "የደንበኛ መረጃን አዘምን"; ?></a></li>
+                <li><a href="./generated_userID.php"><?php echo $lang == "en" ? "Generate Certificate ID" : "የማረጋገጫ መለያ አምጣ"; ?></a></li>
+                <li><a href="view_comments.php" class="action"><?php echo $lang == "en" ? "See Complaints" : "አመለካከቶችን ይመልከቱ"; ?></a></li>
+                <li><a href="./insurancerenew.php"><?php echo $lang == "en" ? "Renew Insurance" : "ኢንሹራንሱን አድስ አድርግ"; ?></a></li>
+                <li><a href="./viewuserMessages.php"><?php echo $lang == "en" ? "Payment Request" : "የክፍያ ጥያቄ"; ?></a></li>
             </ul>
         </div>
     </div>
 
     <div id="content">
         <div class="top-right-buttons">
-            <a href="./logout.php" class="button"><i class="fas fa-sign-out-alt"></i>Logout</a>
-            
+        <a href="./logout.php" class="button"><i class="fas fa-sign-out-alt"></i><?php echo $lang == "en" ? "Logout" : "ውጣ"; ?></a>            
         </div>
 
         <div>
-            <h1 id="Greeting">Welcome to Health Insurance's Manager Page</h1>
+        <h1 id="Greeting">
+                <?php echo $lang == "en" ? "Welcome to Health Insurance's Manager Page" : "ወደ የጤና መድን አስተዳዳሪ ገፅ እንኳን በደህና መጡ"; ?>
+            </h1>
             <h5 id="username-display">
                 <?php echo $greeting . ", " . htmlspecialchars($_SESSION["Username"]); ?>
             </h5>

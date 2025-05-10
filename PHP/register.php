@@ -43,21 +43,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
             // Insert new user into the database (using the correct column names from your schema)
-            $stmt = $conn->prepare("INSERT INTO Users (FirstName, LastName, Email, Phone, BirthDate, Gender, SubCity, Kebele, HomeNo, UserType, Username, Password) 
-                                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("ssssssssssss", $fname, $lname, $email, $phone, $bday, $gender, $sub_city, $kebele, $homeno, $usertype, $uname, $hashed_password);
-
-            $success = $stmt->execute();
-
-            if ($success) {
-                // Get user ID and start session
+            $sql = "INSERT INTO Users (FirstName, LastName, Email, Phone, BirthDate, Gender, SubCity, Kebele, HomeNo, UserType, Username, Password,Status) VALUES ('$fname', '$lname', '$email', '$phone', '$bday', '$gender', '$sub_city', '$kebele', '$homeno', '$usertype', '$uname', '$hashed_password','Deactivate')";
+            if(mysqli_query($conn,$sql)){
                 $_SESSION['id'] = $conn->insert_id;
                 $success = "Registration successful! Redirecting...";
-                header("refresh:2;url=admin.php");  // Redirect after 2 seconds
+                header("refresh:2;url=admin.php"); 
                 exit();
-            } else {
-                $error = "Failed to register. Please try again.";
             }
+            else {
+                 $error = "Failed to register. Please try again.";
+                }
+
+            // $stmt->bind_param("",$fname, $lname, $email, $phone, $bday, $gender, $sub_city, $kebele, $homeno, $usertype, $uname, $hashed_password);
+
+            // $success = $stmt->execute();
+
+            // if ($success) {
+            //     // Get user ID and start session
+            //     $_SESSION['id'] = $conn->insert_id;
+            //     $success = "Registration successful! Redirecting...";
+            //     header("refresh:2;url=admin.php");  // Redirect after 2 seconds
+            //     exit();
+            // } else {
+            //     $error = "Failed to register. Please try again.";
+            // }
         }
     }
 }
@@ -68,7 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up | Gondar Health Insurance</title>
+    <title>Sign Up | Tepi Health Insurance</title>
     <link rel="icon" type="image/x-icon" href="../Images/logo.png">
     <link rel="stylesheet" href="../CSS/registerStyles.css">
     <style>

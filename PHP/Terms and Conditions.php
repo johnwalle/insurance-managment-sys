@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terms and Conditions | CBHI Gondar</title>
+    <title>Terms and Conditions | CBHI Tepi</title>
     <link rel="stylesheet" href="../CSS/Terms and Conditions.css">
     <link rel="icon" type="image/x-icon" href="../Images/logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
@@ -101,7 +101,7 @@
     <main>
         <div>
             <h2>1. Membership Eligibility</h2>
-            <p>Membership in CBHI Gondar is open to all individuals and families residing in the Gondar area. Eligibility may be determined based on the specific guidelines of the Community-Based Health Insurance (CBHI) scheme.</p>
+            <p>Membership in CBHI Tepi is open to all individuals and families residing in the Tepi area. Eligibility may be determined based on the specific guidelines of the Community-Based Health Insurance (CBHI) scheme.</p>
         </div>
 
         <div>
@@ -111,7 +111,7 @@
 
         <div>
             <h2>3. Coverage and Exclusions</h2>
-            <p>The CBHI Gondar scheme covers outpatient and inpatient services, emergency care, maternity services, and essential medications. Certain treatments such as cosmetic surgery or elective procedures may not be covered. Full details of covered services are provided in the policy document.</p>
+            <p>The CBHI Tepi scheme covers outpatient and inpatient services, emergency care, maternity services, and essential medications. Certain treatments such as cosmetic surgery or elective procedures may not be covered. Full details of covered services are provided in the policy document.</p>
         </div>
 
         <div>
@@ -122,17 +122,17 @@
 
 <div>
             <h2>5. Complaints and Dispute Resolution</h2>
-            <p>Members can submit complaints regarding services or claims through the <a href="comment_form.php">Complaints Page</a>. CBHI Gondar is committed to resolving disputes fairly and in a timely manner.</p>
+            <p>Members can submit complaints regarding services or claims through the <a href="comment_form.php">Complaints Page</a>. CBHI Tepi is committed to resolving disputes fairly and in a timely manner.</p>
         </div>
 
         <div>
             <h2>6. Policy Changes</h2>
-            <p>CBHI Gondar reserves the right to modify the terms, conditions, and coverage details at any time. Members will be notified of any changes, and it is their responsibility to review these changes.</p>
+            <p>CBHI Tepi reserves the right to modify the terms, conditions, and coverage details at any time. Members will be notified of any changes, and it is their responsibility to review these changes.</p>
         </div>
 
         <div>
             <h2>7. Governing Law</h2>
-            <p>This agreement is governed by the laws of Ethiopia. Any disputes arising from these terms will be resolved in the courts of Gondar.</p>
+            <p>This agreement is governed by the laws of Ethiopia. Any disputes arising from these terms will be resolved in the courts of Tepi.</p>
         </div>
     </main>
 

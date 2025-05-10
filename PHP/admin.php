@@ -1,8 +1,21 @@
 <?php
 session_start();
-
-// Redirect to login if the user is not logged in
-if (!isset($_SESSION["Username"])) {
+include "header_Before_login.php"; // Include the header file
+$lang = "en"; // Default language is English
+if (isset($_GET['lang']) && $_GET['lang'] == 'am') {
+    $lang = "am"; // Switch to Amharic if 'lang=am' is in the URL
+}
+if (isset($_GET['lang']) && in_array($_GET['lang'], ['en', 'am'])) {
+    $lang = $_GET['lang'];
+    setcookie('lang', $lang, time() + (86400 * 30), '/'); // Cookie expires in 30 days
+    $_COOKIE['lang'] = $lang; // Update the current request with the new language
+} elseif (isset($_COOKIE['lang'])) {
+    $lang = $_COOKIE['lang'];
+} else {
+    $lang = 'en'; // Default language
+}
+// Redirect to login if the user is not logged in or not an admin
+if (!isset($_SESSION["Username"]) || $_SESSION["Role"] !== "Admin") {
     header("Location: login.php");
     exit();
 }
@@ -28,13 +41,16 @@ $current_time = date('h:i A'); // 12-hour format with AM/PM
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<html lang="<?php echo $lang; ?>">
+<head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Health Insurance Admin | Gondar Health Insurance</title>
+    <title><?php echo $lang == 'en' ? 'Health Insurance Admin | Tepi Health Insurance' : 'የጤና መመዝገቢያ አስተዳዳሪ | ተፒ የጤና መድን'; ?></title>
     <link rel="icon" type="image/x-icon" href="../Images/logo.png">
     <link rel="stylesheet" href="../CSS/After_login.css">
     <link rel="stylesheet" href="../CSS/home.css">
+
 
     <style>
         body {
@@ -204,23 +220,23 @@ $current_time = date('h:i A'); // 12-hour format with AM/PM
             </div>
 
             <ul class="nav">
-                <li><a href="./manageusers.php">Manage User Accounts</a></li>
-                <li><a href="./delete_user.php">Delete Account</a></li>
-                <li><a href="./create _account.php">Create Account</a></li>
-               
+                <li><a href="./manageusers.php"><?php echo $lang == 'en' ? 'Manage User Accounts' : 'የተጠቃሚ መለያዎችን አስተዳድር'; ?></a></li>
+                <li><a href="./delete_user.php"><?php echo $lang == 'en' ? 'Delete Account' : 'መለያ ሰርዝ'; ?></a></li>
+                <li><a href="./create _account.php"><?php echo $lang == 'en' ? 'Create Account' : 'መለያ ፍጠር'; ?></a></li>
+                <li><a href="./view_customer_message.php"><?php echo $lang == 'en' ? 'View Customer message' : 'የደንበኛ መልእክት እይ'; ?></a></li>
             </ul>
+
         </div>
     </div>
 
     <div id="content">
         <div class="top-right-buttons">
-            <a href="./logout.php"><button>Logout</button></a>
-            
+        <a href="./logout.php"><button><?php echo $lang == 'en' ? 'Logout' : 'ውጣ'; ?></button></a>            
         </div>
 
         <div>
-            <h1 id="Greeting">Welcome to Health Insurance Admin's  Page</h1>
-            <h2 id="username-display">
+        <h1 id="Greeting"><?php echo $lang == 'en' ? "Welcome to Health Insurance Admin's Page" : 'እንኳን ወደ የጤና መድን አስተዳዳሪ ገፅ በደህና መጡ'; ?></h1>
+        <h2 id="username-display">
                 <?php echo $greeting . ", " . htmlspecialchars($_SESSION["Username"])  ?>
             </h2>
         </div>

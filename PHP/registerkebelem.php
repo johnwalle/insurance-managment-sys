@@ -2,6 +2,12 @@
 session_start();
 include "db_conn.php";
 
+// Redirect to login if the user is not logged in or not an kebele manager
+if (!isset($_SESSION["Username"]) || $_SESSION["Role"] !== "KebeleManager") {
+    header("Location: login.php");
+    exit();
+}
+
 // Initialize variables to store input data for re-population on error
 $name = $lname = $email = $phone = $bday = $gender = $subCity = $kebele = $homeNo = $username = "";
 
@@ -64,7 +70,7 @@ if (isset($_POST['submit'])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up | Gondar Health Insurance</title>
+    <title>Sign Up | Tepi Health Insurance</title>
     <link rel="stylesheet" type="text/css" href="../CSS/registerStyles.css">
     <script src="../JS/registerJS.js"></script>
     <link rel="icon" type="image/x-icon" href="../Images/logo.png">

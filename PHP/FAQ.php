@@ -95,7 +95,7 @@
     </div>
 
     <header>
-        <h1>FAQ - CBHI Gondar</h1>
+        <h1>FAQ - CBHI Tepi</h1>
     </header>
 
     <main class="cont">
@@ -103,13 +103,13 @@
             <!-- Updated FAQ items based on your requirements -->
             
             <div class="faq-item">
-                <h2 class="faq-question">What is CBHI Gondar?</h2>
-                <p class="faq-answer">CBHI Gondar (Community-Based Health Insurance) provides affordable health insurance to residents in Gondar, especially targeting low-income and rural communities. We aim to make healthcare accessible and reduce out-of-pocket expenses for medical treatments.</p>
+                <h2 class="faq-question">What is CBHI Tepi?</h2>
+                <p class="faq-answer">CBHI Tepi (Community-Based Health Insurance) provides affordable health insurance to residents in Tepi, especially targeting low-income and rural communities. We aim to make healthcare accessible and reduce out-of-pocket expenses for medical treatments.</p>
             </div>
 
             <div class="faq-item">
-                <h2 class="faq-question">How can I register for CBHI Gondar?</h2>
-                <p class="faq-answer">You can register for CBHI Gondar directly through our website by visiting the <a href="signup.php">Sign Up</a> page. Simply fill out the form, and you’ll be guided through the registration process.</p>
+                <h2 class="faq-question">How can I register for CBHI Tepi?</h2>
+                <p class="faq-answer">You can register for CBHI Tepi directly through our website by visiting the <a href="signup.php">Sign Up</a> page. Simply fill out the form, and you’ll be guided through the registration process.</p>
             </div>
 
 <div class="faq-item">
@@ -127,8 +127,8 @@
             </div>
 
             <div class="faq-item">
-                <h2 class="faq-question">Where is the CBHI Gondar office located?</h2>
-                <p class="faq-answer">Our main office is located at Piassa, Gondar. You can visit us during business hours for in-person support and inquiries.</p>
+                <h2 class="faq-question">Where is the CBHI Tepi office located?</h2>
+                <p class="faq-answer">Our main office is located at YEKI, Tepi. You can visit us during business hours for in-person support and inquiries.</p>
             </div>
 
             <div class="faq-item">

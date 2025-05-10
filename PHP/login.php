@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | Gondar Health Insurance</title>
+    <title>Login | Tepi Health Insurance</title>
     <link rel="stylesheet" href="../CSS/loginStyles.css">
     <script src="../JS/loginJS.js"></script>
     <link rel="icon" type="image/x-icon" href="../Images/logo.png">
@@ -32,6 +32,9 @@
                     }
                     else if($_GET["error"] == "IncorrectUsernameOrPassword") {
                         echo '<div class="error">Incorrect Username or Password!</div>';
+                    }
+                    else if($_GET["error"] == "EmailNotVerified"){
+                        echo '<div class="error">Email is not verified. Please check your inbox!</div>';
                     }
                 }
                 ?>

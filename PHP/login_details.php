@@ -12,9 +12,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = mysqli_real_escape_string($conn, $_POST["username"]);
     $pwd = $_POST["pwd"];  // Raw password input from user
 
-    // Log input values for debugging
-    error_log("Username: " . $username);
-
     // Validation
     if (empty($username)) {
         header("Location: login.php?error=usernameisrequired");
@@ -23,8 +20,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: login.php?error=passwordisrequired");
         exit();
     } else {
-        // Query to check if username exists
-        $sql = "SELECT * FROM Users WHERE Username = '$username'"; // Changed to 'Users' table
+        // Query to check if username exists and if email is verified
+        $sql = "SELECT * FROM Users WHERE Username = '$username'";
         $result = mysqli_query($conn, $sql);
 
         if (!$result) {
@@ -33,40 +30,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
-        if ($row && password_verify($pwd, $row['Password'])) {
-            // Check if the user is active
-            // if ($row["UserType"] != "Admin" && $row["Status"] != "Active") {
-            //     // User is inactive
-            //     header("Location: login.php?error=accountdeactivated");
-            //     exit();
-            // }
+        if ($row) {
+            // Check if the email is verified
+            if ($row['IsVerified'] == 0) {
+                // Email is not verified
+                header("Location: login.php?error=EmailNotVerified");
+                exit();
+            } else {
+                // Email is verified, check password
+                if (password_verify($pwd, $row['Password'])) {
+                    // Password is correct
 
-            // Password matches and user is active (or is an admin), start session and redirect based on user type
-            $_SESSION["Username"] = $username;
+                    // ✅ Set session variables
+                    $_SESSION["Username"] = $username;
+                    $_SESSION["Role"] = $row["UserType"]; // Store user role in session
 
-            switch ($row["UserType"]) {
-                case "User":
-                    header("Location: profilePage.php");
-                    break;
-                case "Admin":
-                    header("Location: admin.php");
-                    break;
-                case "Hiofficier":
-                    header("Location: hospitalOfficier.php");
-                    break;
-                case "KebeleManager":
-                    header("Location: kebeleManager.php");
-                    break;
-                case "HealthInsuranceManager":
-                    header("Location: healthInsuranceManager.php");
-                    break;
-                default:
-                    header("Location: login.php?error=InvalidUserType");
-                    break;
+                    // Redirect based on role
+                    switch ($row["UserType"]) {
+                        case "User":
+                            header("Location: profilePage.php");
+                            break;
+                        case "Admin":
+                            header("Location: admin.php");
+                            break;
+                        case "Hiofficier":
+                            header("Location: hospitalOfficier.php");
+                            break;
+                        case "KebeleManager":
+                            header("Location: kebeleManager.php");
+                            break;
+                        case "HealthInsuranceManager":
+                            header("Location: healthInsuranceManager.php");
+                            break;
+                        default:
+                            header("Location: login.php?error=InvalidUserType");
+                            break;
+                    }
+                    exit();
+                } else {
+                    // Invalid username or password
+                    header("Location: login.php?error=IncorrectUsernameOrPassword");
+                    exit();
+                }
             }
-            exit();
         } else {
-            // Invalid username or password
+            // Invalid username
             header("Location: login.php?error=IncorrectUsernameOrPassword");
             exit();
         }

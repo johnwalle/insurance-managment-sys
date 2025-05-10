@@ -2,10 +2,32 @@
 session_start();
 
 // Redirect to login if the user is not logged in
-if (!isset($_SESSION["Username"])) {
+if (!isset($_SESSION["Username"]) || $_SESSION["Role"] !== "User") {
     header("Location: login.php");
     exit();
 }
+    include "../header_Before_login.php"; // Include the header file
+    
+    // Default language is English
+    $lang = "en"; 
+    
+    // Check if 'lang' parameter is set in the URL and switch to Amharic if needed
+    if (isset($_GET['lang']) && $_GET['lang'] == 'am') {
+        $lang = "am"; // Switch to Amharic if 'lang=am' is in the URL
+    }
+    
+    // Check for language switch in the URL and save it in a cookie
+    if (isset($_GET['lang']) && in_array($_GET['lang'], ['en', 'am'])) {
+        $lang = $_GET['lang'];
+        setcookie('lang', $lang, time() + (86400 * 30), '/'); // Cookie expires in 30 days
+        $_COOKIE['lang'] = $lang; // Update the current request with the new language
+    } 
+    // Check if there is already a language saved in the cookie
+    elseif (isset($_COOKIE['lang'])) {
+        $lang = $_COOKIE['lang'];
+    } else {
+        $lang = 'en'; // Default to English if no cookie or URL parameter
+    }
 
 // Set timezone
 date_default_timezone_set('Africa/Addis_Ababa');
@@ -21,21 +43,22 @@ if ($current_hour >= 5 && $current_hour < 12) {
     $greeting = "Good Evening";
 }
 
+
 // Get current time
 $current_time = date('h:i A'); // 12-hour format with AM/PM
-?>
-
+?> 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Health Insurance user | Gondar Health Insurance</title>
+    <title><?php echo $lang == "en" ? "Health Insurance User | Tepi Health Insurance" : "የጤና መድህን ተጠቃሚ | ተፒ ጤና መድህን"; ?></title>
     <link rel="icon" type="image/x-icon" href="../Images/logo.png">
     <link rel="stylesheet" href="../CSS/After_login.css">
     <link rel="stylesheet" href="../CSS/home.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- For Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+ <!-- For Font Awesome Icons -->
 
     <style>
         body {
@@ -214,35 +237,35 @@ $current_time = date('h:i A'); // 12-hour format with AM/PM
         <div>
             <div class="logo">
                 <img src="../Images/user.png" alt="Logo">
-                <div class="site-name">User</div>
+                <div class="site-name"><?php echo $lang == "en" ? "User" : "ተጠቃሚ"; ?></div>
             </div>
 
             <ul class="nav">
-                <li><a href="./profileuser.php">Profile Information</a></li>
-                <li><a href="./generateduserID.php">View My Certeficate ID</a></li>
-                <li><a href="comment_form.php" class="action">Complain</a></li>
-                <li><a href="./update_info.php">Update Information</a></li>
-                <li><a href="./change_password.php">Change Password</a></li>
-                <li><a href="./paymentuser.php">Payment Methods</a></li>
-                <li><a href="./userMessages.php">Payment Request</a></li>
-                <li><a href="./helpuser.php">Help</a></li>
-                
+                <li><a href="./profileuser.php"><?php echo $lang == "en" ? "Profile Information" : "የመገለጫ መረጃ"; ?></a></li>
+                <li><a href="./generateduserID.php"><?php echo $lang == "en" ? "View My Certificate ID" : "የማረጋገጫ መታወቂያ አይዲ ይመልከቱ"; ?></a></li>
+                <li><a href="comment_form.php" class="action"><?php echo $lang == "en" ? "Complain" : "ቅሬታ አቅርብ"; ?></a></li>
+                <li><a href="./update_info.php"><?php echo $lang == "en" ? "Update Information" : "መረጃን አዘምን"; ?></a></li>
+                <li><a href="./change_password.php"><?php echo $lang == "en" ? "Change Password" : "የይለፍ ቃል ቀይር"; ?></a></li>
+                <li><a href="./paymentuser.php"><?php echo $lang == "en" ? "Payment Methods" : "የክፍያ ዘዴዎች"; ?></a></li>
+                <li><a href="./requestpaymentmanager.php"><?php echo $lang == "en" ? "Request Payment" : "ክፍያ እንዲደርስዎ ይጠይቁ"; ?></a></li>
+                <li><a href="./sendreciept.php"><?php echo $lang == "en" ? "Send Receipt" : "ደረሰኝ ላክ"; ?></a></li>
+                <li><a href="./helpuser.php"><?php echo $lang == "en" ? "Help" : "እርዳታ"; ?></a></li>
             </ul>
         </div>
     </div>
 
     <div id="content">
         <div class="top-right-buttons">
-            <a href="./logout.php" class="button"><i class="fas fa-sign-out-alt"></i>Logout</a>
-          
+            <a href="./logout.php" class="button"><i class="fas fa-sign-out-alt"></i><?php echo $lang == "en" ? "Logout" : "ውጣ"; ?></a>          
         </div>
 
         <div>
-            <h1 id="Greeting">Welcome to Health Insurance User's Page</h1>
-            <h2 id="username-display">
+        <h1 id="Greeting"><?php echo $lang == "en" ? "Welcome to Health Insurance User's Page" : "እንኳን ወደ የጤና መድህን ተጠቃሚ ገፅ በደህና መጡ"; ?></h1>
+        <h2 id="username-display">
                 <?php echo $greeting . ", " . htmlspecialchars($_SESSION["Username"]); ?>
             </h2>
         </div>
     </div>
 </body>
 </html>
+

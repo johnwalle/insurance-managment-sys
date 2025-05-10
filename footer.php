@@ -16,9 +16,9 @@
   	 <div class="container">
   	 	<div class="row">
   	 		<div class="footer-col">
-  	 			<h4>Gondar Health Insurance </h4>
+  	 			<h4>Tepi Health Insurance </h4>
 				<div class="logo-in-footer">
-					<img src="Images/logooo.png">
+					<img src="Images/logo.jpg">
 				</div>
 				<div class="footer-logo">
 				
@@ -36,9 +36,9 @@
   	 		<div class="footer-col">
   	 			<h4>Contact Us</h4>
   	 			<ul>
-					<li><a href="https://www.bing.com/ck/a?!&&p=d56ec4fb55e9a4d7JmltdHM9MTcyNDAyNTYwMCZpZ3VpZD0wMWQ2ODMxNi0xZGViLTZjMjQtMzZmYy05NzNjMWM5YzZkMDQmaW5zaWQ9NTY1Mw&ptn=3&ver=2&hsh=3&fclid=01d68316-1deb-6c24-36fc-973c1c9c6d04&u=a1L21hcHM_Jm1lcGk9MjR-flRvcE9mUGFnZX5MYXJnZU1hcExpbmsmdHk9MTgmcT1Hb25kZXIlMkMlMjBBbWhhcmElMjBSZWdpb24lMkMlMjBFdGhpb3BpYSZzYXRpZD1pZC5zaWQlM0E4NWI1YjI4MC1iZGFiLTZmYWUtNmJlNi0yNWM1MTQxYmE1OTAmdmRwaWQ9NzMyOTM2NTQxODg5MDQ5Mzk1MyZtYj0xMi42Mjg0NDh-MzcuNDQ2NTc5fjEyLjU2NDIwNH4zNy40ODExNzQmcHBvaXM9MTIuNTk2MzI1ODc0MzI4NjEzXzM3LjQ2Mzg3NjcyNDI0MzE2NF9Hb25kZXIlMkMlMjBBbWhhcmElMjBSZWdpb24lMkMlMjBFdGhpb3BpYV9-JnY9MiZzVj0xJkZPUk09TUlSRSZxcHZ0PW1hcCthZGRyZXNzK2xpbmsrb2YrR29uZGFyK2V0aGlvcGlhK2pvYnM&ntb=1">Gondar, Amhara, <br>Ethiopia </a></li>
-  	 				<li><a href="tel:+251707949412">Tel : +251707949412</a></li>
-  	 				<li>Email: Gondarhealthinfo@gmail.com</li>
+					<li><a href="https://www.bing.com/ck/a?!&&p=d56ec4fb55e9a4d7JmltdHM9MTcyNDAyNTYwMCZpZ3VpZD0wMWQ2ODMxNi0xZGViLTZjMjQtMzZmYy05NzNjMWM5YzZkMDQmaW5zaWQ9NTY1Mw&ptn=3&ver=2&hsh=3&fclid=01d68316-1deb-6c24-36fc-973c1c9c6d04&u=a1L21hcHM_Jm1lcGk9MjR-flRvcE9mUGFnZX5MYXJnZU1hcExpbmsmdHk9MTgmcT1Hb25kZXIlMkMlMjBBbWhhcmElMjBSZWdpb24lMkMlMjBFdGhpb3BpYSZzYXRpZD1pZC5zaWQlM0E4NWI1YjI4MC1iZGFiLTZmYWUtNmJlNi0yNWM1MTQxYmE1OTAmdmRwaWQ9NzMyOTM2NTQxODg5MDQ5Mzk1MyZtYj0xMi42Mjg0NDh-MzcuNDQ2NTc5fjEyLjU2NDIwNH4zNy40ODExNzQmcHBvaXM9MTIuNTk2MzI1ODc0MzI4NjEzXzM3LjQ2Mzg3NjcyNDI0MzE2NF9Hb25kZXIlMkMlMjBBbWhhcmElMjBSZWdpb24lMkMlMjBFdGhpb3BpYV9-JnY9MiZzVj0xJkZPUk09TUlSRSZxcHZ0PW1hcCthZGRyZXNzK2xpbmsrb2YrR29uZGFyK2V0aGlvcGlhK2pvYnM&ntb=1">Tepi, South Western, <br>Ethiopia </a></li>
+  	 				<li><a href="tel:+251938143653">Tel : +251938143653</a></li>
+  	 				<li>Email: Tepihealthinfo@gmail.com</li>
   	 			</ul>
   	 		</div>
   	 		<div class="footer-col">
@@ -52,7 +52,7 @@
   	 		</div>
   	 	</div>
 		<div class="copyright">
-			<p>Copyright 2024 © Gondar Health Insurance All Rights Reserved</p>
+			<p>Copyright 2024 © Tepi Health Insurance All Rights Reserved</p>
 		</div>
 		<div class="button-group" id="bottomlinks">
 			<a href="#"><button >Terms of Use</button></a>

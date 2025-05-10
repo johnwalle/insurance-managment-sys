@@ -2,7 +2,7 @@
 session_start();
 
 // Redirect to login if the user is not logged in
-if (!isset($_SESSION["Username"])) {
+if (!isset($_SESSION["Username"]) || $_SESSION["Role"] !== "KebeleManager") {
     header("Location: login.php");
     exit();
 }
@@ -29,7 +29,7 @@ if ($current_hour >= 5 && $current_hour < 12) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kebele Manager | Gondar Health Insurance</title>
+    <title>Kebele Manager | Tepi Health Insurance</title>
     <link rel="icon" type="image/x-icon" href="../Images/logo.png">
     <link rel="stylesheet" href="../CSS/After_login.css">
     <link rel="stylesheet" href="../CSS/home.css">

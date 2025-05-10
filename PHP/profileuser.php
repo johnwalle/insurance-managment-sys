@@ -17,6 +17,26 @@ if ($conn->connect_error) {
 
 // Assuming you are using session to store logged-in username
 session_start();
+
+// Redirect to login if the user is not logged in or not an admin
+if (!isset($_SESSION["Username"]) || $_SESSION["Role"] !== "User") {
+    header("Location: login.php");
+    exit();
+}
+include "header_Before_login.php"; // Include the header file
+$lang = "en"; // Default language is English
+if (isset($_GET['lang']) && $_GET['lang'] == 'am') {
+    $lang = "am"; // Switch to Amharic if 'lang=am' is in the URL
+}
+if (isset($_GET['lang']) && in_array($_GET['lang'], ['en', 'am'])) {
+    $lang = $_GET['lang'];
+    setcookie('lang', $lang, time() + (86400 * 30), '/'); // Cookie expires in 30 days
+    $_COOKIE['lang'] = $lang; // Update the current request with the new language
+} elseif (isset($_COOKIE['lang'])) {
+    $lang = $_COOKIE['lang'];
+} else {
+    $lang = 'en'; // Default language
+}
 $loggedInUsername = $_SESSION['Username']; // Adjust this as necessary
 
 // Fetch user information
@@ -40,13 +60,14 @@ $conn->close();
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?php echo $lang == 'en' ? 'en' : 'am'; ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile | Gondar Health Insurance</title>
+    <title><?php echo $lang == "en" ? "User Profile | Tepi Health Insurance" : "የተጠቃሚ መገለጫ | ተፒ የጤና መድን"; ?></title>
     <link rel="icon" type="image/x-icon" href="../Images/logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <style>
         /* General Styling */
         body {
@@ -198,7 +219,10 @@ $conn->close();
 </head>
 <body>
 
-<a href="profilepage.php" class="back-to-home"><i class="fas fa-home"></i><span>Back to Home</span></a>
+<a href="profilepage.php" class="back-to-home">
+    <i class="fas fa-home"></i>
+    <span><?php echo $lang == "en" ? "Back to Home" : "ወደ መነሻ ተመለስ"; ?></span>
+</a>
 
 <div class="profile-image">
     <i class="fas fa-user"></i>
@@ -207,55 +231,56 @@ $conn->close();
 <?php if (isset($userInfo['Error'])): ?>
     <p class="status-message"><?= htmlspecialchars($userInfo['Error']); ?></p>
 <?php else: ?>
-    <h2>User Profile</h2>
+    <h2><?php echo $lang == "en" ? "User Profile" : "የተጠቃሚ መገለጫ"; ?></h2>
 
     <div class="profile-info">
         <div class="profile-info-left">
             <div class="profile-item">
                 <i class="fas fa-user"></i>
-                <span>Username: <?= htmlspecialchars($userInfo['Username'] ?? ''); ?></span>
+                <span><?php echo $lang == "en" ? "Username: " : "የተጠቃሚ ስም፡ "; ?><?= htmlspecialchars($userInfo['Username'] ?? ''); ?></span>
             </div>
             <div class="profile-item">
                 <i class="fas fa-id-badge"></i>
-                <span>First Name: <?= htmlspecialchars($userInfo['FirstName'] ?? ''); ?></span>
+                <span><?php echo $lang == "en" ? "First Name: " : "ስም፡ "; ?><?= htmlspecialchars($userInfo['FirstName'] ?? ''); ?></span>
             </div>
             <div class="profile-item">
                 <i class="fas fa-id-badge"></i>
-                <span>Last Name: <?= htmlspecialchars($userInfo['LastName'] ?? ''); ?></span>
+                <span><?php echo $lang == "en" ? "Last Name: " : "የአባት ስም፡ "; ?><?= htmlspecialchars($userInfo['LastName'] ?? ''); ?></span>
             </div>
             <div class="profile-item">
                 <i class="fas fa-envelope"></i>
-                <span>Email: <?= htmlspecialchars($userInfo['Email'] ?? ''); ?></span>
+                <span><?php echo $lang == "en" ? "Email: " : "ኢሜይል፡ "; ?><?= htmlspecialchars($userInfo['Email'] ?? ''); ?></span>
             </div>
             <div class="profile-item">
                 <i class="fas fa-phone"></i>
-                <span>Phone Number: <?= htmlspecialchars($userInfo['Phone'] ?? ''); ?></span>
+                <span><?php echo $lang == "en" ? "Phone Number: " : "ስልክ ቁጥር፡ "; ?><?= htmlspecialchars($userInfo['Phone'] ?? ''); ?></span>
             </div>
         </div>
         <div class="profile-info-right">
             <div class="profile-item">
                 <i class="fas fa-city"></i>
-                <span>Sub City: <?= htmlspecialchars($userInfo['SubCity'] ?? ''); ?></span>
+                <span><?php echo $lang == "en" ? "Sub City: " : "ክ/ከተማ፡ "; ?><?= htmlspecialchars($userInfo['SubCity'] ?? ''); ?></span>
             </div>
             <div class="profile-item">
                 <i class="fas fa-map-marker-alt"></i>
-                <span>Kebele: <?= htmlspecialchars($userInfo['Kebele'] ?? ''); ?></span>
+                <span><?php echo $lang == "en" ? "Kebele: " : "ቀበሌ፡ "; ?><?= htmlspecialchars($userInfo['Kebele'] ?? ''); ?></span>
             </div>
             <div class="profile-item">
                 <i class="fas fa-home"></i>
-                <span>Home Number: <?= htmlspecialchars($userInfo['HomeNo'] ?? ''); ?></span>
+                <span><?php echo $lang == "en" ? "Home Number: " : "የቤት ቁጥር፡ "; ?><?= htmlspecialchars($userInfo['HomeNo'] ?? ''); ?></span>
             </div>
             <div class="profile-item">
                 <i class="fas fa-birthday-cake"></i>
-                <span>Date of Birth: <?= htmlspecialchars($userInfo['BirthDate'] ?? ''); ?></span>
+                <span><?php echo $lang == "en" ? "Date of Birth: " : "የትውልድ ቀን፡ "; ?><?= htmlspecialchars($userInfo['BirthDate'] ?? ''); ?></span>
             </div>
             <div class="profile-item">
                 <i class="fas fa-venus-mars"></i>
-                <span>Gender: <?= htmlspecialchars($userInfo['Gender'] ?? ''); ?></span>
+                <span><?php echo $lang == "en" ? "Gender: " : "ፆታ፡ "; ?><?= htmlspecialchars($userInfo['Gender'] ?? ''); ?></span>
             </div>
         </div>
     </div>
 <?php endif; ?>
 
 </body>
+
 </html>

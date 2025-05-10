@@ -17,8 +17,8 @@ if ($conn->connect_error) {
 
 // Fetch users with UserType = 'User'
 $users = [];
-$sql = "SELECT id, username, paid_status 
-        FROM registered_user 
+$sql = "SELECT UserId, username, paid_status 
+        FROM users 
         WHERE UserType = 'User'";
 $result = $conn->query($sql);
 
@@ -36,9 +36,9 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
     $action = $_GET['action'];
     
     if ($action === 'mark_paid') {
-        $updateSql = "UPDATE registered_user SET paid_status = 'paid' WHERE id = ?";
+        $updateSql = "UPDATE users SET paid_status = 'paid' WHERE UserId = ?";
     } elseif ($action === 'mark_unpaid') {
-        $updateSql = "UPDATE registered_user SET paid_status = 'unpaid' WHERE id = ?";
+        $updateSql = "UPDATE users SET paid_status = 'unpaid' WHERE UserId = ?";
     }
     
     if (isset($updateSql)) {
@@ -61,7 +61,7 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Management | Gondar Health Insurance</title>
+    <title>Payment Management | Tepi Health Insurance</title>
     <link rel="icon" type="image/x-icon" href="../Images/logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- For Font Awesome Icons -->
     <style>
@@ -74,7 +74,6 @@ $conn->close();
             background-size: cover;
             background-position: center;
             color: #333;
-            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -210,13 +209,21 @@ $conn->close();
             <tbody>
                 <?php foreach ($users as $user): ?>
                 <tr>
-                    <td><?= htmlspecialchars($user['username']); ?></td>
-                    <td><?= htmlspecialchars($user['paid_status']); ?></td>
+                    <td><?= htmlspecialchars($user['username']); ?></td>   
+                    <td>
+                        <?php 
+                        if($user['paid_status'] == ""){
+                            echo 'Not set';
+                        }
+                        else{
+                            echo $user['paid_status'];
+                        }
+                         ?></td>
                     <td>
                         <?php if ($user['paid_status'] === 'paid'): ?>
-                            <a href="?action=mark_unpaid&id=<?= htmlspecialchars($user['id']); ?>" class="update-btn">Mark as Unpaid</a>
+                            <a href="?action=mark_unpaid&id=<?= htmlspecialchars($user['UserId']); ?>" class="update-btn">Mark as Unpaid</a>
                         <?php else: ?>
-                            <a href="?action=mark_paid&id=<?= htmlspecialchars($user['id']); ?>" class="update-btn">Mark as Paid</a>
+                            <a href="?action=mark_paid&id=<?= htmlspecialchars($user['UserId']); ?>" class="update-btn">Mark as Paid</a>
                         <?php endif; ?>
                     </td>
                 </tr>

@@ -20,14 +20,14 @@ if (isset($_GET['user_id'])) {
     $user_id = $_GET['user_id'];
 
     // Calculate the new insurance expiry date (e.g., extend by 1 year)
-    $new_expiry_date = date('Y-m-d', strtotime('+1 year'));
+    $new_expiry_date = date('Y-m-d H:i:s', strtotime('+1 year'));
 
     // Update the user's insurance expiry date in the database
-    $sql = "UPDATE registered_user SET insurance_expiry = '$new_expiry_date' WHERE id = $user_id";
+    $sql = "UPDATE users SET insurance_expiry = '$new_expiry_date' WHERE UserId = $user_id";
 
     if ($conn->query($sql) === TRUE) {
         echo "<p>Insurance successfully renewed! New expiry date: $new_expiry_date</p>";
-        echo "<a href='renew_insurance.php'>Go back to the user list</a>";
+        echo "<a href='insurancerenew.php'>Go back to the user list</a>";
     } else {
         echo "Error updating record: " . $conn->error;
     }

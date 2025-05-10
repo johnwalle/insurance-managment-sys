@@ -2,6 +2,13 @@
 // Enable error reporting
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+session_start();
+
+// Check if the user is logged in
+if (!isset($_SESSION["Username"]) || $_SESSION["Role"] !== "HealthInsuranceManager") {
+    header("Location: login.php");
+    exit();
+}
 
 // Database connection
 $servername = "localhost";
@@ -36,7 +43,7 @@ $conn->close();
 <head>
 <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Users | Gondar Health Insurance</title>
+    <title>All Users | Tepi Health Insurance</title>
     <link rel="icon" type="image/x-icon" href="../Images/logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -46,7 +53,7 @@ $conn->close();
             padding: 20px;
             background-color: #f4f4f9;
             color: #333;
-            background-image: url('../Images/bg14.jpg'); no-repeat center center fixed;
+            background-image: url('../Images/bg14.jpg');
         }
 
         h2 {

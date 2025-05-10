@@ -1,9 +1,21 @@
+<?php
+// Start the session
+session_start();
+// Check if the user is logged in
+if (!isset($_SESSION["Username"]) || $_SESSION["Role"] !== "HealthInsuranceManager") {
+    header("Location: login.php");
+    exit();
+}
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Complaints | Gondar Health Insurance</title>
+    <title>User Complaints | Tepi Health Insurance</title>
     <link rel="icon" type="image/x-icon" href="../Images/logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- For Font Awesome Icons -->
     <style>
@@ -16,7 +28,6 @@
             background-size: cover;
             background-position: center;
             color: #333;
-            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;

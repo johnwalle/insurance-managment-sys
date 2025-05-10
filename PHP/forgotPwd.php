@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Forgot Password | Gondar health insurance</title>
+    <title>Forgot Password | Tepi health insurance</title>
     <link rel="stylesheet" type="text/css" href="../CSS/forgotPwd.css">
     <link rel="icon" type="image/x-icon" href="../Images/logo.png">
 </head>

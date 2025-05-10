@@ -1,9 +1,21 @@
+<?php
+session_start();
+
+// Redirect to login if the user is not logged in or not an admin
+if (!isset($_SESSION["Username"]) || $_SESSION["Role"] !== "Admin") {
+    header("Location: login.php");
+    exit();
+}
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Users List | Gondar Health Insurance</title>
+    <title>Users List | Tepi Health Insurance</title>
     <link rel="icon" type="image/x-icon" href="../Images/logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -128,7 +140,7 @@
     }
 
     // Query to fetch user details
-    $sql = "SELECT UserID, FirstName, LastName, Email, Phone, BirthDate, Gender, SubCity, Kebele, HomeNo, Username, Status FROM Users";
+    $sql = "SELECT UserId, FirstName, LastName, Email, Phone, BirthDate, Gender, SubCity, Kebele, HomeNo, Username, Status ,Reciept_image FROM Users";
     $result = $conn->query($sql);
 
     if (!$result) {
@@ -149,6 +161,7 @@
                 <th>Kebele</th>
                 <th>Home No</th>
                 <th>Username</th>
+                <th>Reciept</th>
                 <th>Status</th>
               </tr>";
 
@@ -156,7 +169,7 @@
             $statusClass = $row["Status"] === 'Active' ? 'active' : 'deactivated';
 
             echo "<tr>
-                    <td>" . htmlspecialchars($row["UserID"]) . "</td>
+                    <td>" . htmlspecialchars($row["UserId"]) . "</td>
                     <td>" . htmlspecialchars($row["FirstName"]) . "</td>
                     <td>" . htmlspecialchars($row["LastName"]) . "</td>
                     <td>" . htmlspecialchars($row["Email"]) . "</td>
@@ -167,15 +180,17 @@
                     <td>" . htmlspecialchars($row["Kebele"]) . "</td>
                     <td>" . htmlspecialchars($row["HomeNo"]) . "</td>
                     <td>" . htmlspecialchars($row["Username"]) . "</td>
-                    <td>
-                        <select class='status-dropdown $statusClass' onchange='changeStatus(this, \"" . htmlspecialchars($row["UserID"]) . "\")'>
-                            <option value='Active'" . ($row["Status"] === 'Active' ? ' selected' : '') . ">Active</option>
-                            <option value='Deactivated'" . ($row["Status"] === 'Deactivated' ? ' selected' : '') . ">Deactivated</option>
-                        </select>
+                    <td><a href='../recieptimage/".$row["Reciept_image"]."'>View</a></td>
+                    <td>"; 
+                      if ($row['Status']== "activated"){
+                    ?>
+                        <a href="manageduser.php?userid=<?php echo htmlentities($row['UserId']);?>&&username=<?php echo htmlentities($row['Username']);?>&&action=Deactivated" onclick=" return confirm('Do you really want to deactivate( <?php echo $row['Username'];?>)?')"><i class="fa fa-check-circle" style="color:green;"> </i>Activated</a> 
+                        <?php }else { ?>
+                    &nbsp;<a href="manageduser.php?userid=<?php echo htmlentities($row['UserId']);?>&&username=<?php echo htmlentities($row['Username']);?>&&action=activated" onclick="return confirm('Do you really want to activate( <?php echo $row['Username'];?>)?')"> <i class="fa fa-times-circle" style="color: red;"></i>Deactivated</a>
+                        <?php } ?>
                     </td>
                   </tr>";
-        }
-
+       <?php  }
         echo "</table>";
     } else {
         echo "<p class='status-message error'>No users found.</p>";

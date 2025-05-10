@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $submittedUsername = $_POST['username'];
 
     // Fetch user data based on username
-    $sql = "SELECT id, Username, First_Name, Last_Name, Gender, Kebele, Phone_Number FROM registered_user WHERE Username = ? AND UserType = 'User'";
+    $sql = "SELECT UserId, Username, FirstName, LastName, Gender, Kebele, Phone FROM users WHERE Username = ? AND UserType = 'User'";
     $stmt = $conn->prepare($sql);
     if (!$stmt) {
         die("Prepare failed: " . $conn->error);
@@ -38,15 +38,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($result->num_rows > 0) {
         // Fetch the user data
         $userData = $result->fetch_assoc();
-        $userId = $userData['id'];
+        $userId = $userData['UserId'];
 
         // Generate QR code URL dynamically
-        $dataForQRCode = "Username: {$userData['Username']}\nName: {$userData['First_Name']} {$userData['Last_Name']}\nGender: {$userData['Gender']}\nKebele: {$userData['Kebele']}\nPhone: {$userData['Phone_Number']}";
+        $dataForQRCode = "Username: {$userData['Username']}\nName: {$userData['FirstName']} {$userData['LastName']}\nGender: {$userData['Gender']}\nKebele: {$userData['Kebele']}\nPhone: {$userData['Phone']}";
         $encodedData = urlencode($dataForQRCode);
         $qrCodeURL = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=$encodedData";
 
         // Save the generated QR code URL to the database
-        $updateSQL = "UPDATE registered_user SET QR_Code_URL = ?, ID_Generated = 1 WHERE id = ?";
+        $updateSQL = "UPDATE users SET QR_Code_URL = ?, ID_Generated = 1 WHERE UserId = ?";
         $updateStmt = $conn->prepare($updateSQL);
         if ($updateStmt) {
             $updateStmt->bind_param('si', $qrCodeURL, $userId);
@@ -71,7 +71,7 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generate Certificate | Gondar Health Insurance</title>
+    <title>Generate Certificate | Tepi Health Insurance</title>
     <link rel="icon" type="image/x-icon" href="../Images/logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -231,13 +231,13 @@ $conn->close();
     <?php if ($userData): ?>
         <div class="card">
             <div class="text-content">
-                <h2>Gondar Health Insurance ID Card</h2>
+                <h2>Tepi Health Insurance ID Card</h2>
                 <p><strong>Username:</strong> <?php echo htmlspecialchars($userData['Username']); ?></p>
-                <p><strong>First Name:</strong> <?php echo htmlspecialchars($userData['First_Name']); ?></p>
-                <p><strong>Last Name:</strong> <?php echo htmlspecialchars($userData['Last_Name']); ?></p>
+                <p><strong>First Name:</strong> <?php echo htmlspecialchars($userData['FirstName']); ?></p>
+                <p><strong>Last Name:</strong> <?php echo htmlspecialchars($userData['LastName']); ?></p>
                 <p><strong>Gender:</strong> <?php echo htmlspecialchars($userData['Gender']); ?></p>
                 <p><strong>Kebele:</strong> <?php echo htmlspecialchars($userData['Kebele']); ?></p>
-                <p><strong>Phone Number:</strong> <?php echo htmlspecialchars($userData['Phone_Number']); ?></p>
+                <p><strong>Phone Number:</strong> <?php echo htmlspecialchars($userData['Phone']); ?></p>
             </div>
             <img src="<?php echo $qrCodeURL; ?>" alt="QR Code" class="qr-code">
         </div>

@@ -17,6 +17,16 @@ if ($conn->connect_error) {
 
 // Assuming you are using session to store logged-in username
 session_start();
+
+
+
+// Redirect to login if the user is not logged in or not an admin
+if (!isset($_SESSION["Username"]) || $_SESSION["Role"] !== "User") {
+    header("Location: login.php");
+    exit();
+}
+
+
 $loggedInUsername = $_SESSION['Username']; // Adjust this as necessary
 
 // Fetch user information for the form
@@ -82,7 +92,7 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Information | Gondar Health Insurance</title>
+    <title>Update Information | Tepi Health Insurance</title>
     <link rel="icon" type="image/x-icon" href="../Images/logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>

@@ -7,6 +7,22 @@ if (!isset($_SESSION["Username"])) {
     exit();
 }
 
+include "header_Before_login.php"; // Include the header file
+$lang = "en"; // Default language is English
+if (isset($_GET['lang']) && $_GET['lang'] == 'am') {
+    $lang = "am"; // Switch to Amharic if 'lang=am' is in the URL
+}
+if (isset($_GET['lang']) && in_array($_GET['lang'], ['en', 'am'])) {
+    $lang = $_GET['lang'];
+    setcookie('lang', $lang, time() + (86400 * 30), '/'); // Cookie expires in 30 days
+    $_COOKIE['lang'] = $lang; // Update the current request with the new language
+} elseif (isset($_COOKIE['lang'])) {
+    $lang = $_COOKIE['lang'];
+} else {
+    $lang = 'en'; // Default language
+}
+
+
 // Set timezone
 date_default_timezone_set('Africa/Addis_Ababa');
 // Get current hour
@@ -23,17 +39,19 @@ if ($current_hour >= 5 && $current_hour < 12) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="<?php echo $lang; ?>">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hospital HI Officer | Gondar Health Insurance</title>
+    <title>
+        <?php echo $lang == 'en' ? "Hospital HI Officer | Tepi Health Insurance" : "የሆስፒታል የጤና መስጠት ኦፊሰር | ቴፒ የጤና መስጠት"; ?>
+    </title>
     <link rel="icon" type="image/x-icon" href="../Images/logo.png">
     <link rel="stylesheet" href="../CSS/After_login.css">
     <link rel="stylesheet" href="../CSS/home.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- For Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+ <!-- For Font Awesome Icons -->
 
     <style>
         /* General Body Styling */
@@ -215,29 +233,37 @@ if ($current_hour >= 5 && $current_hour < 12) {
         <div>
             <div class="logo">
                 <img src="../Images/officier.png" alt="Officer Logo">
-                <div class="site-name"> Hi Officer </div>
+                <div class="site-name">
+                <?php echo $lang == 'en' ? "HI Officer" : "የጤና መስጠት ኦፊሰር"; ?>
+            </div>
+        </div>
             </div>
 
             <ul class="nav">
-            <li><a href="./see_infoHI.php">View Customer Information</a></li>
-                <li><a href="./requestpayment.php">Request Payment</a></li>
-                <li><a href="./viewuserpayments.php" class="action">View Payment</a></li>
-                
-            </ul>
+            <li><a href="./see_infoHI.php"><?php echo $lang == 'en' ? "View Customer Information" : "የደንበኞች መረጃ ይመልከቱ"; ?></a></li>
+            <li><a href="./requestpayment.php"><?php echo $lang == 'en' ? "Request Payment" : "ክፍያ ይጠይቁ"; ?></a></li>
+            <li><a href="./viewuserpayments.php" class="action"><?php echo $lang == 'en' ? "View Payment" : "ክፍያዎችን ይመልከቱ"; ?></a></li>
+        </ul>
+
         </div>
     </div>
 
     <div id="content">
         <div class="top-right-buttons">
-            <a href="./logout.php" class="button"><i class="fas fa-sign-out-alt"></i>Logout</a>
+        <a href="./logout.php" class="button"><i class="fas fa-sign-out-alt"></i>
+                <?php echo $lang == 'en' ? "Logout" : "ውጣ"; ?>
+            </a>
           
         </div>
 
         <div>
-            <h1 id="Greeting">Welcome to Hospital's Hi Officer Page</h1>
+        <h1 id="Greeting">
+                <?php echo $lang == 'en' ? "Welcome to Hospital's HI Officer Page" : "እንኳን ወደ ሆስፒታሉ የጤና መስጠት ኦፊሰር ገፅ በደህና መጡ"; ?>
+            </h1>
             <h5 id="username-display">
-                <?php echo $greeting . ", " . htmlspecialchars($_SESSION["Username"]); ?>
+                <?php echo ($lang == 'en' ? $greeting . ", " : $greeting . "፣ ") . htmlspecialchars($_SESSION["Username"]); ?>
             </h5>
+
         </div>
     </div>
 </body>

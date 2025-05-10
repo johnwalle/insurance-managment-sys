@@ -1,6 +1,27 @@
 <?php
 session_start();
+
+include "header_Before_login.php"; // Include the header file
+$lang = "en"; // Default language is English
+if (isset($_GET['lang']) && $_GET['lang'] == 'am') {
+    $lang = "am"; // Switch to Amharic if 'lang=am' is in the URL
+}
+if (isset($_GET['lang']) && in_array($_GET['lang'], ['en', 'am'])) {
+    $lang = $_GET['lang'];
+    setcookie('lang', $lang, time() + (86400 * 30), '/'); // Cookie expires in 30 days
+    $_COOKIE['lang'] = $lang; // Update the current request with the new language
+} elseif (isset($_COOKIE['lang'])) {
+    $lang = $_COOKIE['lang'];
+} else {
+    $lang = 'en'; // Default language
+}
 require_once "db_conn.php"; // Ensure your database connection is properly set here
+
+// Redirect to login if the user is not logged in or not an admin
+if (!isset($_SESSION["Username"]) || $_SESSION["Role"] !== "Admin") {
+    header("Location: login.php");
+    exit();
+}
 
 $error = '';
 $success = '';
@@ -61,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up | Gondar Health Insurance</title>
+    <title><?php echo $lang == "en" ? "Sign Up | Tepi Health Insurance" : "መመዝገብ | ተፒ የጤና መድን"; ?></title>
     <link rel="icon" type="image/x-icon" href="../Images/logo.png">
     <link rel="stylesheet" href="../CSS/registerStyles.css">
     <style>
@@ -104,86 +125,90 @@ input[type="submit"]:active {
             <p id="error"><?= htmlspecialchars($error) ?></p>
         <?php endif; ?>
         <?php if ($success): ?>
-            <p id="success">Registration successful! Redirecting...</p>
+            <p id="success"><?php echo $lang == "en" ? "Registration successful! Redirecting..." : "መመዝገብ ተሳክቷል! በመላክ ላይ..."; ?></p>
         <?php endif; ?>
 
         <form action="register.php" method="POST">
-        <h2>Registration</h2>
+        <h2><?php echo $lang == "en" ? "Registration" : "መመዝገብ"; ?></h2>
 
-            <div class="input-box">
-                <label>Full Name</label>
-                <div class="column">
-                    <input type="text" name="name" placeholder="First Name" required>
-                    <input type="text" name="lname" placeholder="Last Name" required>
-                </div>
-            </div>
+<div class="input-box">
+    <label><?php echo $lang == "en" ? "Full Name" : "ሙሉ ስም"; ?></label>
+    <div class="column">
+        <input type="text" name="name" placeholder="<?php echo $lang == 'en' ? 'First Name' : 'አንደኛ ስም'; ?>" required>
+        <input type="text" name="lname" placeholder="<?php echo $lang == 'en' ? 'Last Name' : 'የአባት ስም'; ?>" required>
+    </div>
+</div>
 
-            <div class="input-box">
-                <label>Email</label>
-                <input type="email" name="email" placeholder="ex: myName@gmail.com" required>
-            </div>
+<div class="input-box">
+    <label><?php echo $lang == "en" ? "Email" : "ኢሜይል"; ?></label>
+    <input type="email" name="email" placeholder="<?php echo $lang == 'en' ? 'ex: myName@gmail.com' : 'ምሳሌ፡ myName@gmail.com'; ?>" required>
+</div>
 
-            <div class="column">
-                <div class="input-box">
-                    <label>Phone Number</label>
-                    <input type="text" name="phone" placeholder="xxxxxxxxxx" required>
-                </div>
-                <div class="input-box">
-                    <label>Date of Birth</label>
-                    <input type="date" name="bday" required>
-                </div>
-            </div>
+<div class="column">
+    <div class="input-box">
+        <label><?php echo $lang == "en" ? "Phone Number" : "ስልክ ቁጥር"; ?></label>
+        <input type="text" name="phone" placeholder="<?php echo $lang == 'en' ? 'xxxxxxxxxx' : 'xxxxxxxxxx'; ?>" required>
+    </div>
+    <div class="input-box">
+        <label><?php echo $lang == "en" ? "Date of Birth" : "የትውልድ ቀን"; ?></label>
+        <input type="date" name="bday" required>
+    </div>
+</div>
 
-            <div class="gender-box">
-                <h3>Gender</h3>
-                <div class="gender-option">
-                    <label><input type="radio" name="gender" value="Male" checked> Male</label>
-                    <label><input type="radio" name="gender" value="Female"> Female</label>
-                </div>
-            </div>
+<div class="gender-box">
+    <h3><?php echo $lang == "en" ? "Gender" : "ፆታ"; ?></h3>
+    <div class="gender-option">
+        <label><input type="radio" name="gender" value="Male" checked> <?php echo $lang == "en" ? "Male" : "ወንድ"; ?></label>
+        <label><input type="radio" name="gender" value="Female"> <?php echo $lang == "en" ? "Female" : "ሴት"; ?></label>
+    </div>
+</div>
 
-            <div class="input-box">
-                <label>Address</label>
-                <div class="column">
-                    <input type="text" name="sub_city" placeholder="Sub City" required>
-                    <input type="text" name="kebele" placeholder="Kebele" required>
-                    <input type="text" name="homeno" placeholder="Home No" required>
-                </div>
-            </div>
+<div class="input-box">
+    <label><?php echo $lang == "en" ? "Address" : "አድራሻ"; ?></label>
+    <div class="column">
+        <input type="text" name="sub_city" placeholder="<?php echo $lang == 'en' ? 'Sub City' : 'ክፍለ ከተማ'; ?>" required>
+        <input type="text" name="kebele" placeholder="<?php echo $lang == 'en' ? 'Kebele' : 'ቀበሌ'; ?>" required>
+        <input type="text" name="homeno" placeholder="<?php echo $lang == 'en' ? 'Home No' : 'የቤት ቁጥር'; ?>" required>
+    </div>
+</div>
 
-            <div class="uType-box">
-                <h3>User Type</h3>
-                <div class="uType-option">
-                    <label><input type="radio" name="usertype" value="User" checked> User</label>
-                    <label><input type="radio" name="usertype" value="Admin"> Admin</label>
-                    <label><input type="radio" name="usertype" value="KebeleManager"> Kebele Manager</label>
-                    <label><input type="radio" name="usertype" value="HealthInsuranceManager"> Health Insurance Manager</label>
-                    <label><input type="radio" name="usertype" value="Hiofficier"> HI Officer</label>
-                </div>
-            </div>
+<div class="uType-box">
+    <h3><?php echo $lang == "en" ? "User Type" : "የተጠቃሚ አይነት"; ?></h3>
+    <div class="uType-option">
+        <label><input type="radio" name="usertype" value="User" checked> <?php echo $lang == "en" ? "User" : "ተጠቃሚ"; ?></label>
+        <label><input type="radio" name="usertype" value="Admin"> <?php echo $lang == "en" ? "Admin" : "አስተዳዳሪ"; ?></label>
+        <label><input type="radio" name="usertype" value="KebeleManager"> <?php echo $lang == "en" ? "Kebele Manager" : "የቀበሌ አስተዳዳሪ"; ?></label>
+        <label><input type="radio" name="usertype" value="HealthInsuranceManager"> <?php echo $lang == "en" ? "Health Insurance Manager" : "የጤና መድን አስተዳዳሪ"; ?></label>
+        <label><input type="radio" name="usertype" value="Hiofficier"> <?php echo $lang == "en" ? "HI Officer" : "የጤና መድን ባለሙያ"; ?></label>
+    </div>
+</div>
 
-            <div class="input-box">
-                <label>Username</label>
-                <input type="text" name="uname" placeholder="Username" required>
-            </div>
+<div class="input-box">
+    <label><?php echo $lang == "en" ? "Username" : "የተጠቃሚ ስም"; ?></label>
+    <input type="text" name="uname" placeholder="<?php echo $lang == 'en' ? 'Username' : 'የተጠቃሚ ስም'; ?>" required>
+</div>
 
-            <div class="input-box">
-                <label>Password</label>
-                <input type="password" name="password" placeholder="Enter password" required>
-            </div>
+<div class="input-box">
+    <label><?php echo $lang == "en" ? "Password" : "የይለፍ ቃል"; ?></label>
+    <input type="password" name="password" placeholder="<?php echo $lang == 'en' ? 'Enter password' : 'የይለፍ ቃል ያስገቡ'; ?>" required>
+</div>
 
-            <div class="input-box">
-                <label>Confirm Password</label>
-                <input type="password" name="re_password" placeholder="Re-enter password" required>
-            </div>
+<div class="input-box">
+    <label><?php echo $lang == "en" ? "Confirm Password" : "የይለፍ ቃልን ያረጋግጡ"; ?></label>
+    <input type="password" name="re_password" placeholder="<?php echo $lang == 'en' ? 'Re-enter password' : 'የይለፍ ቃልን ዳግመኛ ያስገቡ'; ?>" required>
+</div>
 
-            <div class="check">
-                <input type="checkbox" required> I have read and agree to the <a href="terms.php">Terms & Conditions</a>
-            </div>
+<div class="check">
+    <input type="checkbox" required>
+    <?php echo $lang == "en" ? "I have read and agree to the" : "ህጉን አንብቤ ተስማምቻለሁ"; ?>
+    <a href="terms.php"><?php echo $lang == "en" ? "Terms & Conditions" : "ውሎች እና መመሪያዎች"; ?></a>
+</div>
 
-            <input type="submit" value="Register">
+<input type="submit" value="<?php echo $lang == 'en' ? 'Register' : 'ይመዝገቡ'; ?>">
 
-            <h4>Already have an account? <a href="login.php">Log in</a></h4>
+<h4><?php echo $lang == "en" ? "Already have an account?" : "አስቀድሞ መለያ አለዎት?"; ?>
+    <a href="login.php"><?php echo $lang == "en" ? "Log in" : "ይግቡ"; ?></a>
+</h4>
         </form>
     </div>
 </body>

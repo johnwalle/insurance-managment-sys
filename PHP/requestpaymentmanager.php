@@ -8,6 +8,14 @@ $username = "root";
 $password = "";
 $dbname = "final_project";
 
+
+// Redirect to login if the user is not logged in or not an user
+if (!isset($_SESSION["Username"]) || $_SESSION["Role"] !== "User") {
+    header("Location: login.php");
+    exit();
+}
+
+
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -21,16 +29,39 @@ $error = '';
 $success = '';
 
 // Check if the form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['username'], $_POST['message'])) {
+if (isset($_POST['send']) && isset($_POST['username'], $_POST['message'])) {
     $username = trim($_POST['username']);
     $message = trim($_POST['message']);
+
+    // $target_dir = "C:/xampp/htdocs/insurance-managment-sys/recieptimage/"; // Directory to store images
+    // $image=$_FILES["image"]["name"];
+    // $target_file = $target_dir.$_FILES["image"]["name"];
+    // $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+    // $allowed_types = ["jpg", "jpeg", "png", "gif"];
+
+    // // Check if the file is an image
+    // $check =getimagesize($_FILES["image"]["tmp_name"]);
+    // if ($check === false) {
+    //     echo "File is not an image.";
+    //     exit;
+    // }
+
+    // // Validate file type
+    // if (!in_array($imageFileType, $allowed_types)) {
+    //     echo "Only JPG, JPEG, PNG & GIF files are allowed.";
+    //     exit;
+    // }
+    //    $users= $_SESSION["Username"];
+    //    if(!empty($image) ){
+    //     move_uploaded_file($_FILES["image"]["tmp_name"], $target_file);
+    //    }
     
     // Validate input
     if (empty($username) || empty($message)) {
         $error = "Username and message are required.";
     } else {
         // Prepare and execute the insert query
-        $sql = "INSERT INTO messages (username, message, sent_at) VALUES (?, ?, NOW())";
+        $sql = "INSERT INTO messages (username, message,sent_at) VALUES (?,?,NOW())";
         $stmt = $conn->prepare($sql);
 
         if (!$stmt) {
@@ -185,19 +216,20 @@ $conn->close();
 </head>
 <body>
 
-<a href="healthInsuranceManager.php" class="back-to-home"><i class="fas fa-home"></i><span>Back to Home</span></a> <!-- Redirect to PHP file -->
+<a href="profilePage.php" class="back-to-home"><i class="fas fa-home"></i><span>Back to Home</span></a> <!-- Redirect to PHP file -->
 
 <div class="container">
     <h2>Send Payment Request Message</h2>
 
-    <form method="post" action="">
+    <form method="post" action="requestpaymentmanager.php">
         <label for="username">Enter Username:</label>
         <input type="text" id="username" name="username" required>
 
         <label for="message">Enter Payment Request Message:</label>
         <textarea id="message" name="message" rows="5" required></textarea>
+        <input type="file" name="image">
 
-        <button type="submit">Send Request</button>
+        <button type="submit" name="send">Send Request</button>
     </form>
 
     <?php if ($_SERVER["REQUEST_METHOD"] == "POST"): ?>
@@ -213,3 +245,5 @@ $conn->close();
 
 </body>
 </html>
+
+

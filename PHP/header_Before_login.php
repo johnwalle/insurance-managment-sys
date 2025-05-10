@@ -105,7 +105,7 @@
 
         <div class="logo">
             <img src="images/logooo.png" >
-            <div class="site-name">Gondar CBHI</div>
+            <div class="site-name">Tepi CBHI</div>
         </div>
     
         <div class="middle-list">

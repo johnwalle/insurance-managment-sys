@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Verify Password | Gondar Health Insurance</title>
+    <title>Verify Password | Tepi Health Insurance</title>
     <link rel="stylesheet" type="text/css" href="../CSS/veriPwd.css">
     <link rel="icon" type="image/x-icon" href="../Images/logo.png">
 </head>

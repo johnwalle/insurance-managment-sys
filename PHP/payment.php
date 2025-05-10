@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../CSS/payment.css">
     <link rel="icon" type="image/x-icon" href="../Images/logo.png">
-    <title>Payment Methods | Gondar Health Insurance</title>
+    <title>Payment Methods | Tepi Health Insurance</title>
     <style>
         #paymentbody{
             margin-top:100px;
